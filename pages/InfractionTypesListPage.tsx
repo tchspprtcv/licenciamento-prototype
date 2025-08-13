@@ -4,22 +4,19 @@ import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/Table';
-import { EntityType } from '../types';
 
-export const EntitiesListPage = () => {
-    const { entities, deleteEntity, entityTypes } = useData();
+export const InfractionTypesListPage = () => {
+    const { infractionTypes, deleteInfractionType } = useData();
     const [searchTerm, setSearchTerm] = useState('');
 
-    const getEntityTypeName = (id: number) => entityTypes.find(et => et.id === id)?.name || 'N/A';
-
-    const filteredEntities = entities.filter(entity =>
-        entity.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredItems = infractionTypes.filter(item =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const handleDelete = (id: number) => {
-        if (window.confirm('Tem a certeza que deseja eliminar esta entidade?')) {
-            deleteEntity(id);
-            alert('Entidade eliminada com sucesso.');
+        if (window.confirm('Tem a certeza que deseja eliminar este tipo?')) {
+            deleteInfractionType(id);
+            alert('Tipo de infração eliminado com sucesso.');
         }
     };
 
@@ -28,12 +25,12 @@ export const EntitiesListPage = () => {
             <CardHeader>
                 <div className="flex justify-between items-start">
                     <div>
-                        <CardTitle>Entidades</CardTitle>
-                        <CardDescription>Pesquise, visualize e gira as entidades envolvidas nos processos.</CardDescription>
+                        <CardTitle>Tipos de Infração</CardTitle>
+                        <CardDescription>Gerir os tipos de infração (ex: Leve, Grave).</CardDescription>
                     </div>
-                    <Button asLink to="/entidades/novo">
+                    <Button asLink to="/parametrizacao/tipos-infracao/novo">
                         <PlusIcon className="w-4 h-4 mr-2" />
-                        Nova Entidade
+                        Novo Tipo
                     </Button>
                 </div>
                 <div className="flex items-center space-x-4 pt-4">
@@ -49,26 +46,20 @@ export const EntitiesListPage = () => {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Nome da Entidade</TableHead>
-                            <TableHead>Tipo</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Telefone</TableHead>
+                            <TableHead>Nome do Tipo</TableHead>
                             <TableHead className="text-right">Ações</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredEntities.map((entity) => (
-                            <TableRow key={entity.id}>
-                                <TableCell className="font-medium">{entity.name}</TableCell>
-                                <TableCell>{getEntityTypeName(entity.entityTypeId)}</TableCell>
-                                <TableCell>{entity.email || '-'}</TableCell>
-                                <TableCell>{entity.phone || '-'}</TableCell>
+                        {filteredItems.map((item) => (
+                            <TableRow key={item.id}>
+                                <TableCell className="font-medium">{item.name}</TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex justify-end space-x-2">
-                                        <Button asLink to={`/entidades/${entity.id}`} variant="ghost" size="sm">
+                                        <Button asLink to={`/parametrizacao/tipos-infracao/${item.id}`} variant="ghost" size="sm">
                                             <PencilIcon className="w-4 h-4" />
                                         </Button>
-                                        <Button variant="ghost" size="sm" onClick={() => handleDelete(entity.id)}>
+                                        <Button variant="ghost" size="sm" onClick={() => handleDelete(item.id)}>
                                             <Trash2Icon className="w-4 h-4 text-cv-red" />
                                         </Button>
                                     </div>
@@ -77,8 +68,8 @@ export const EntitiesListPage = () => {
                         ))}
                     </TableBody>
                 </Table>
-                {filteredEntities.length === 0 && (
-                    <p className="text-center text-gray-500 py-8">Nenhuma entidade encontrada.</p>
+                {filteredItems.length === 0 && (
+                    <p className="text-center text-gray-500 py-8">Nenhum tipo encontrado.</p>
                 )}
             </CardContent>
         </Card>

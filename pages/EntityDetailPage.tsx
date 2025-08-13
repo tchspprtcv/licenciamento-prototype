@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useData } from '../context/DataContext';
-import { Entity, EntityType } from '../types';
+import { Entity } from '../types';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -10,12 +10,12 @@ import { Select } from '../components/ui/Select';
 export const EntityDetailPage = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { getEntityById, addEntity, updateEntity } = useData();
+    const { getEntityById, addEntity, updateEntity, entityTypes } = useData();
     const isNew = id === undefined;
 
     const [entity, setEntity] = useState<Omit<Entity, 'id' | 'createdAt'>>({
         name: '',
-        type: EntityType.Decisao,
+        entityTypeId: 0,
         email: '',
         phone: '',
     });
@@ -30,7 +30,8 @@ export const EntityDetailPage = () => {
     }, [id, isNew, getEntityById]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        setEntity({ ...entity, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setEntity({ ...entity, [name]: name === 'name' || name === 'email' || name === 'phone' ? value : parseInt(value) });
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -61,10 +62,11 @@ export const EntityDetailPage = () => {
                             <Input id="name" name="name" value={entity.name} onChange={handleChange} required />
                         </div>
                         <div>
-                            <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">Tipo de Entidade <span className="text-cv-red">*</span></label>
-                            <Select id="type" name="type" value={entity.type} onChange={handleChange} required>
-                                {Object.values(EntityType).map(type => (
-                                    <option key={type} value={type}>{type}</option>
+                            <label htmlFor="entityTypeId" className="block text-sm font-medium text-gray-700 mb-1">Tipo de Entidade <span className="text-cv-red">*</span></label>
+                            <Select id="entityTypeId" name="entityTypeId" value={entity.entityTypeId} onChange={handleChange} required>
+                                <option value={0} disabled>Selecione um tipo</option>
+                                {entityTypes.map(type => (
+                                    <option key={type.id} value={type.id}>{type.name}</option>
                                 ))}
                             </Select>
                         </div>

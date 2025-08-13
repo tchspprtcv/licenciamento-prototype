@@ -1,14 +1,13 @@
 
-export enum SectorType {
-  Primario = 'Primário',
-  Secundario = 'Secundário',
-  Terciario = 'Terciário',
+export interface SectorType {
+  id: number;
+  name: string;
 }
 
 export interface Sector {
   id: number;
   name: string;
-  type: SectorType;
+  sectorTypeId: number;
   description: string;
   cae?: string;
   categoryCount: number;
@@ -52,11 +51,16 @@ export interface LicenseType {
   isLifetime?: boolean;
 }
 
+export interface LegislationType {
+    id: number;
+    name: string;
+}
+
 export interface Legislation {
     id: number;
     licenseTypeId: number;
-    name: string;
-    type: string;
+    name:string;
+    legislationTypeId: number;
     publicationDate: string;
     documentUrl?: string;
 }
@@ -70,24 +74,29 @@ export interface Fee {
     status: 'Activo' | 'Inactivo';
 }
 
+export interface InfractionType {
+    id: number;
+    name: string;
+}
+
 export interface Infraction {
     id: number;
     licenseTypeId: number;
     name: string;
+    infractionTypeId: number;
     minFine: number;
     maxFine: number;
 }
 
-export enum EntityType {
-    Decisao = 'Decisão',
-    Parecer = 'Parecer',
-    Vistoria = 'Vistoria',
+export interface EntityType {
+    id: number;
+    name: string;
 }
 
 export interface Entity {
     id: number;
     name: string;
-    type: EntityType;
+    entityTypeId: number;
     email?: string;
     phone?: string;
     createdAt: number;

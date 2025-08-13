@@ -41,25 +41,25 @@ export const SettingsPage = () => {
                     <SettingsCard
                         title="Tipos de Setor"
                         description="Gerir as classificações de setores (ex: Primário, Secundário, Terciário)."
-                        linkTo="#"
+                        linkTo="/parametrizacao/tipos-setor"
                         icon={<LayersIcon className="w-8 h-8" />}
                     />
                      <SettingsCard
                         title="Tipos de Entidade"
                         description="Gerir os papéis que as entidades podem ter num processo (ex: Decisão, Parecer)."
-                        linkTo="#"
+                        linkTo="/parametrizacao/tipos-entidade"
                         icon={<MilestoneIcon className="w-8 h-8" />}
                     />
                      <SettingsCard
                         title="Tipos de Legislação"
                         description="Gerir os tipos de documentos legais que podem ser associados (ex: Lei, Decreto)."
-                        linkTo="#"
+                        linkTo="/parametrizacao/tipos-legislacao"
                         icon={<BookMarkedIcon className="w-8 h-8" />}
                     />
                      <SettingsCard
                         title="Tipos de Infração"
                         description="Gerir as categorias ou classificações para as infrações."
-                        linkTo="#"
+                        linkTo="/parametrizacao/tipos-infracao"
                         icon={<AlertTriangleIcon className="w-8 h-8" />}
                     />
                     <SettingsCard

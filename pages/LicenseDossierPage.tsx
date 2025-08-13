@@ -26,9 +26,11 @@ export const LicenseDossierPage = () => {
         getLicenseTypeById,
         updateLicenseType,
         legislations, addLegislation, deleteLegislation,
+        legislationTypes,
         fees, addFee, deleteFee,
         infractions, addInfraction, deleteInfraction,
-        entities, licenseEntities, associateEntityToLicense, dissociateEntityFromLicense
+        infractionTypes,
+        entities, entityTypes, licenseEntities, associateEntityToLicense, dissociateEntityFromLicense
     } = useData();
 
 
@@ -43,10 +45,14 @@ export const LicenseDossierPage = () => {
         }
     }, [id, getLicenseTypeById]);
 
-    const [newLegislation, setNewLegislation] = useState({ name: '', type: '', publicationDate: '' });
+    const [newLegislation, setNewLegislation] = useState({ name: '', legislationTypeId: 0, publicationDate: '' });
     const [newFee, setNewFee] = useState({ process: '', value: 0, status: 'Activo' as 'Activo' | 'Inactivo' });
-    const [newInfraction, setNewInfraction] = useState({ name: '', minFine: 0, maxFine: 0 });
+    const [newInfraction, setNewInfraction] = useState({ name: '', infractionTypeId: 0, minFine: 0, maxFine: 0 });
     const [selectedEntityId, setSelectedEntityId] = useState('');
+
+    const getLegislationTypeName = (id: number) => legislationTypes.find(lt => lt.id === id)?.name || 'N/A';
+    const getInfractionTypeName = (id: number) => infractionTypes.find(it => it.id === id)?.name || 'N/A';
+    const getEntityTypeName = (id: number) => entityTypes.find(et => et.id === id)?.name || 'N/A';
 
     const licenseLegislations = id ? legislations.filter(l => l.licenseTypeId === parseInt(id)) : [];
     const licenseFees = id ? fees.filter(f => f.licenseTypeId === parseInt(id)) : [];
@@ -163,7 +169,7 @@ export const LicenseDossierPage = () => {
                                             {licenseLegislations.map(leg => (
                                                 <TableRow key={leg.id}>
                                                     <TableCell>{leg.name}</TableCell>
-                                                    <TableCell>{leg.type}</TableCell>
+                                                    <TableCell>{getLegislationTypeName(leg.legislationTypeId)}</TableCell>
                                                     <TableCell>{leg.publicationDate}</TableCell>
                                                     <TableCell className="text-right">
                                                         <Button variant="ghost" size="sm" onClick={() => deleteLegislation(leg.id)}>
@@ -181,8 +187,12 @@ export const LicenseDossierPage = () => {
                             <CardFooter className="border-t pt-4">
                                 <form onSubmit={(e) => {
                                     e.preventDefault();
+                                    if (!newLegislation.legislationTypeId) {
+                                        alert('Por favor, selecione um tipo de legislação.');
+                                        return;
+                                    }
                                     addLegislation({ ...newLegislation, licenseTypeId: license.id });
-                                    setNewLegislation({ name: '', type: '', publicationDate: '' });
+                                    setNewLegislation({ name: '', legislationTypeId: 0, publicationDate: '' });
                                 }} className="flex items-end space-x-4 w-full">
                                     <div className="flex-grow">
                                         <label className="text-sm font-medium">Nome</label>
@@ -190,7 +200,10 @@ export const LicenseDossierPage = () => {
                                     </div>
                                      <div className="flex-grow">
                                         <label className="text-sm font-medium">Tipo</label>
-                                        <Input value={newLegislation.type} onChange={(e) => setNewLegislation({...newLegislation, type: e.target.value})} placeholder="Ex: Lei de Bases" required/>
+                                        <Select value={newLegislation.legislationTypeId} onChange={(e) => setNewLegislation({...newLegislation, legislationTypeId: parseInt(e.target.value)})} required>
+                                            <option value={0} disabled>Selecione um tipo</option>
+                                            {legislationTypes.map(lt => <option key={lt.id} value={lt.id}>{lt.name}</option>)}
+                                        </Select>
                                     </div>
                                      <div className="flex-grow">
                                         <label className="text-sm font-medium">Data Publicação</label>
@@ -275,6 +288,7 @@ export const LicenseDossierPage = () => {
                                         <TableHeader>
                                             <TableRow>
                                                 <TableHead>Infração</TableHead>
+                                                <TableHead>Tipo</TableHead>
                                                 <TableHead>Coima Mínima (CVE)</TableHead>
                                                 <TableHead>Coima Máxima (CVE)</TableHead>
                                                 <TableHead className="text-right">Ações</TableHead>
@@ -284,6 +298,7 @@ export const LicenseDossierPage = () => {
                                             {licenseInfractions.map(inf => (
                                                 <TableRow key={inf.id}>
                                                     <TableCell>{inf.name}</TableCell>
+                                                    <TableCell>{getInfractionTypeName(inf.infractionTypeId)}</TableCell>
                                                     <TableCell>{inf.minFine.toLocaleString('pt-CV')} CVE</TableCell>
                                                     <TableCell>{inf.maxFine.toLocaleString('pt-CV')} CVE</TableCell>
                                                     <TableCell className="text-right">
@@ -302,12 +317,23 @@ export const LicenseDossierPage = () => {
                              <CardFooter className="border-t pt-4">
                                 <form onSubmit={(e) => {
                                     e.preventDefault();
+                                    if (!newInfraction.infractionTypeId) {
+                                        alert('Por favor, selecione um tipo de infração.');
+                                        return;
+                                    }
                                     addInfraction({ ...newInfraction, licenseTypeId: license.id });
-                                    setNewInfraction({ name: '', minFine: 0, maxFine: 0 });
+                                    setNewInfraction({ name: '', infractionTypeId: 0, minFine: 0, maxFine: 0 });
                                 }} className="flex items-end space-x-4 w-full">
                                     <div className="flex-grow">
                                         <label className="text-sm font-medium">Nome da Infração</label>
                                         <Input value={newInfraction.name} onChange={(e) => setNewInfraction({...newInfraction, name: e.target.value})} placeholder="Ex: Exploração sem licença" required/>
+                                    </div>
+                                    <div style={{flexBasis: '200px'}}>
+                                        <label className="text-sm font-medium">Tipo</label>
+                                        <Select value={newInfraction.infractionTypeId} onChange={(e) => setNewInfraction({...newInfraction, infractionTypeId: parseInt(e.target.value)})} required>
+                                            <option value={0} disabled>Selecione um tipo</option>
+                                            {infractionTypes.map(it => <option key={it.id} value={it.id}>{it.name}</option>)}
+                                        </Select>
                                     </div>
                                      <div style={{flexBasis: '200px'}}>
                                         <label className="text-sm font-medium">Coima Mínima (CVE)</label>
@@ -340,7 +366,7 @@ export const LicenseDossierPage = () => {
                                             {associatedEntities.map(assoc => (
                                                 <TableRow key={assoc.id}>
                                                     <TableCell>{assoc.entity.name}</TableCell>
-                                                    <TableCell>{assoc.entity.type}</TableCell>
+                                                    <TableCell>{getEntityTypeName(assoc.entity.entityTypeId)}</TableCell>
                                                     <TableCell className="text-right">
                                                         <Button variant="ghost" size="sm" onClick={() => dissociateEntityFromLicense(assoc.id)}>
                                                             <Trash2Icon className="w-4 h-4 text-cv-red" />

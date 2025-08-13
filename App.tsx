@@ -14,6 +14,14 @@ import { LicenseDossierPage } from './pages/LicenseDossierPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { EntitiesListPage } from './pages/EntitiesListPage';
 import { EntityDetailPage } from './pages/EntityDetailPage';
+import { LegislationTypesListPage } from './pages/LegislationTypesListPage';
+import { LegislationTypeDetailPage } from './pages/LegislationTypeDetailPage';
+import { InfractionTypesListPage } from './pages/InfractionTypesListPage';
+import { InfractionTypeDetailPage } from './pages/InfractionTypeDetailPage';
+import { EntityTypesListPage } from './pages/EntityTypesListPage';
+import { EntityTypeDetailPage } from './pages/EntityTypeDetailPage';
+import { SectorTypesListPage } from './pages/SectorTypesListPage';
+import { SectorTypeDetailPage } from './pages/SectorTypeDetailPage';
 
 function App() {
   return (
@@ -35,6 +43,18 @@ function App() {
           <Route path="/entidades/novo" element={<EntityDetailPage />} />
           <Route path="/entidades/:id" element={<EntityDetailPage />} />
           <Route path="/parametrizacao" element={<SettingsPage />} />
+          <Route path="/parametrizacao/tipos-legislacao" element={<LegislationTypesListPage />} />
+          <Route path="/parametrizacao/tipos-legislacao/novo" element={<LegislationTypeDetailPage />} />
+          <Route path="/parametrizacao/tipos-legislacao/:id" element={<LegislationTypeDetailPage />} />
+          <Route path="/parametrizacao/tipos-infracao" element={<InfractionTypesListPage />} />
+          <Route path="/parametrizacao/tipos-infracao/novo" element={<InfractionTypeDetailPage />} />
+          <Route path="/parametrizacao/tipos-infracao/:id" element={<InfractionTypeDetailPage />} />
+          <Route path="/parametrizacao/tipos-entidade" element={<EntityTypesListPage />} />
+          <Route path="/parametrizacao/tipos-entidade/novo" element={<EntityTypeDetailPage />} />
+          <Route path="/parametrizacao/tipos-entidade/:id" element={<EntityTypeDetailPage />} />
+          <Route path="/parametrizacao/tipos-setor" element={<SectorTypesListPage />} />
+          <Route path="/parametrizacao/tipos-setor/novo" element={<SectorTypeDetailPage />} />
+          <Route path="/parametrizacao/tipos-setor/:id" element={<SectorTypeDetailPage />} />
         </Routes>
       </Layout>
     </DataProvider>

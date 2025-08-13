@@ -1,4 +1,29 @@
-import { Sector, Category, LicenseType, SectorType, Legislation, Fee, Infraction, LicensingModel, ValidityUnit, Entity, EntityType, LicenseEntity } from './types';
+import { Sector, Category, LicenseType, SectorType, Legislation, Fee, Infraction, LicensingModel, ValidityUnit, Entity, EntityType, LicenseEntity, LegislationType, InfractionType } from './types';
+
+export const SECTOR_TYPES: SectorType[] = [
+    { id: 1, name: 'Primário' },
+    { id: 2, name: 'Secundário' },
+    { id: 3, name: 'Terciário' },
+];
+
+export const ENTITY_TYPES: EntityType[] = [
+    { id: 1, name: 'Decisão' },
+    { id: 2, name: 'Parecer' },
+    { id: 3, name: 'Vistoria' },
+];
+
+export const INFRACTION_TYPES: InfractionType[] = [
+    { id: 1, name: 'Leve' },
+    { id: 2, name: 'Grave' },
+    { id: 3, name: 'Muito Grave' },
+];
+
+export const LEGISLATION_TYPES: LegislationType[] = [
+    { id: 1, name: 'Decreto-Lei' },
+    { id: 2, name: 'Lei de Bases' },
+    { id: 3, name: 'Regulamento' },
+    { id: 4, name: 'Postura Municipal' },
+];
 
 export const LICENSE_ENTITIES: LicenseEntity[] = [
     { id: 1, licenseTypeId: 1, entityId: 1 }, // Licença de Hotel -> IGAE
@@ -9,25 +34,25 @@ export const LICENSE_ENTITIES: LicenseEntity[] = [
 ];
 
 export const ENTITIES: Entity[] = [
-  { id: 1, name: 'IGAE', type: EntityType.Decisao, email: 'geral@igae.cv', phone: '123456789', createdAt: Date.now() - 50000 },
-  { id: 2, name: 'Polícia Nacional', type: EntityType.Parecer, email: 'pn@gov.cv', phone: '123456789', createdAt: Date.now() - 40000 },
-  { id: 3, name: 'Câmara Municipal da Praia', type: EntityType.Decisao, email: 'cmp@cm-praia.cv', phone: '123456789', createdAt: Date.now() - 30000 },
-  { id: 4, name: 'Bombeiros', type: EntityType.Vistoria, email: 'bombeiros@gov.cv', phone: '123456789', createdAt: Date.now() - 20000 },
-  { id: 5, name: 'Delegacia de Saúde', type: EntityType.Parecer, email: 'ds@gov.cv', phone: '123456789', createdAt: Date.now() - 10000 },
+  { id: 1, name: 'IGAE', entityTypeId: 1, email: 'geral@igae.cv', phone: '123456789', createdAt: Date.now() - 50000 },
+  { id: 2, name: 'Polícia Nacional', entityTypeId: 2, email: 'pn@gov.cv', phone: '123456789', createdAt: Date.now() - 40000 },
+  { id: 3, name: 'Câmara Municipal da Praia', entityTypeId: 1, email: 'cmp@cm-praia.cv', phone: '123456789', createdAt: Date.now() - 30000 },
+  { id: 4, name: 'Bombeiros', entityTypeId: 3, email: 'bombeiros@gov.cv', phone: '123456789', createdAt: Date.now() - 20000 },
+  { id: 5, name: 'Delegacia de Saúde', entityTypeId: 2, email: 'ds@gov.cv', phone: '123456789', createdAt: Date.now() - 10000 },
 ];
 
 export const SECTORS: Sector[] = [
-  { id: 1, name: 'Agricultura e Pecuária', type: SectorType.Primario, description: 'Atividades de cultivo e criação de animais.', categoryCount: 3, licenseCount: 5, createdAt: Date.now() - 100000 },
-  { id: 2, name: 'Pescas', type: SectorType.Primario, description: 'Atividades de pesca industrial e artesanal.', cae: '031', categoryCount: 2, licenseCount: 2, createdAt: Date.now() - 90000 },
-  { id: 3, name: 'Indústrias Transformadoras', type: SectorType.Secundario, description: 'Transformação de matérias-primas.', categoryCount: 4, licenseCount: 8, createdAt: Date.now() - 80000 },
-  { id: 4, name: 'Construção Civil e Obras Públicas', type: SectorType.Secundario, description: 'Construção de edifícios e infraestruturas.', categoryCount: 1, licenseCount: 1, createdAt: Date.now() - 70000 },
-  { id: 5, name: 'Turismo', type: SectorType.Terciario, description: 'Alojamento, restauração e agências de viagens.', cae: '55, 56, 79', categoryCount: 9, licenseCount: 8, createdAt: Date.now() - 60000 },
-  { id: 6, name: 'Comércio', type: SectorType.Terciario, description: 'Comércio a grosso e a retalho.', categoryCount: 2, licenseCount: 1, createdAt: Date.now() - 50000 },
-  { id: 7, name: 'Indústrias Extrativas', type: SectorType.Primario, description: 'Extração de inertes, etc.', categoryCount: 1, licenseCount: 1, createdAt: Date.now() - 40000 },
-  { id: 8, name: 'Produção e Distribuição de Energia e Água', type: SectorType.Secundario, description: 'Produção e distribuição de eletricidade e água potável.', categoryCount: 1, licenseCount: 1, createdAt: Date.now() - 30000 },
-  { id: 9, name: 'Transportes', type: SectorType.Terciario, description: 'Transporte marítimo e aéreo de passageiros e carga.', categoryCount: 1, licenseCount: 0, createdAt: Date.now() - 20000 },
-  { id: 10, name: 'Serviços Financeiros', type: SectorType.Terciario, description: 'Bancos, seguros e outras atividades financeiras.', categoryCount: 0, licenseCount: 0, createdAt: Date.now() - 10000 },
-  { id: 11, name: 'Tecnologias de Informação e Comunicação (TIC)', type: SectorType.Terciario, description: 'Serviços de software, telecomunicações, etc.', categoryCount: 0, licenseCount: 0, createdAt: Date.now() },
+  { id: 1, name: 'Agricultura e Pecuária', sectorTypeId: 1, description: 'Atividades de cultivo e criação de animais.', categoryCount: 3, licenseCount: 5, createdAt: Date.now() - 100000 },
+  { id: 2, name: 'Pescas', sectorTypeId: 1, description: 'Atividades de pesca industrial e artesanal.', cae: '031', categoryCount: 2, licenseCount: 2, createdAt: Date.now() - 90000 },
+  { id: 3, name: 'Indústrias Transformadoras', sectorTypeId: 2, description: 'Transformação de matérias-primas.', categoryCount: 4, licenseCount: 8, createdAt: Date.now() - 80000 },
+  { id: 4, name: 'Construção Civil e Obras Públicas', sectorTypeId: 2, description: 'Construção de edifícios e infraestruturas.', categoryCount: 1, licenseCount: 1, createdAt: Date.now() - 70000 },
+  { id: 5, name: 'Turismo', sectorTypeId: 3, description: 'Alojamento, restauração e agências de viagens.', cae: '55, 56, 79', categoryCount: 9, licenseCount: 8, createdAt: Date.now() - 60000 },
+  { id: 6, name: 'Comércio', sectorTypeId: 3, description: 'Comércio a grosso e a retalho.', categoryCount: 2, licenseCount: 1, createdAt: Date.now() - 50000 },
+  { id: 7, name: 'Indústrias Extrativas', sectorTypeId: 1, description: 'Extração de inertes, etc.', categoryCount: 1, licenseCount: 1, createdAt: Date.now() - 40000 },
+  { id: 8, name: 'Produção e Distribuição de Energia e Água', sectorTypeId: 2, description: 'Produção e distribuição de eletricidade e água potável.', categoryCount: 1, licenseCount: 1, createdAt: Date.now() - 30000 },
+  { id: 9, name: 'Transportes', sectorTypeId: 3, description: 'Transporte marítimo e aéreo de passageiros e carga.', categoryCount: 1, licenseCount: 0, createdAt: Date.now() - 20000 },
+  { id: 10, name: 'Serviços Financeiros', sectorTypeId: 3, description: 'Bancos, seguros e outras atividades financeiras.', categoryCount: 0, licenseCount: 0, createdAt: Date.now() - 10000 },
+  { id: 11, name: 'Tecnologias de Informação e Comunicação (TIC)', sectorTypeId: 3, description: 'Serviços de software, telecomunicações, etc.', categoryCount: 0, licenseCount: 0, createdAt: Date.now() },
 ];
 
 export const CATEGORIES: Category[] = [
@@ -71,21 +96,21 @@ export const LICENSE_TYPES: LicenseType[] = [
 
 export const LEGISLATIONS: Legislation[] = [
     // Turismo
-    { id: 1, licenseTypeId: 1, name: 'Lei n.º 100/VIII/2015', type: 'Lei de Bases', publicationDate: '2015-08-10' },
+    { id: 1, licenseTypeId: 1, name: 'Lei n.º 100/VIII/2015', legislationTypeId: 2, publicationDate: '2015-08-10' },
     // Comércio e Serviços
-    { id: 2, licenseTypeId: 2, name: 'Decreto-Lei n.º 24/2015', type: 'Decreto-Lei', publicationDate: '2015-05-20', documentUrl: '#' },
+    { id: 2, licenseTypeId: 2, name: 'Decreto-Lei n.º 24/2015', legislationTypeId: 1, publicationDate: '2015-05-20', documentUrl: '#' },
     // Indústria
-    { id: 3, licenseTypeId: 5, name: 'Decreto-Lei nº 53/2015', type: 'Decreto-Lei', publicationDate: '2015-10-01' },
+    { id: 3, licenseTypeId: 5, name: 'Decreto-Lei nº 53/2015', legislationTypeId: 1, publicationDate: '2015-10-01' },
     // Comércio
-    { id: 4, licenseTypeId: 4, name: 'Decreto-Lei n.º 24/2015', type: 'Decreto-Lei', publicationDate: '2015-05-20', documentUrl: '#' },
+    { id: 4, licenseTypeId: 4, name: 'Decreto-Lei n.º 24/2015', legislationTypeId: 1, publicationDate: '2015-05-20', documentUrl: '#' },
     // Ambiente para Construção
-    { id: 5, licenseTypeId: 12, name: 'Lei n.º 47/VIII/2014', type: 'Lei de Bases do Ambiente', publicationDate: '2014-06-15' },
+    { id: 5, licenseTypeId: 12, name: 'Lei n.º 47/VIII/2014', legislationTypeId: 2, publicationDate: '2014-06-15' },
     // Ambiente para Indústria
-    { id: 6, licenseTypeId: 5, name: 'Lei n.º 47/VIII/2014', type: 'Lei de Bases do Ambiente', publicationDate: '2014-06-15' },
+    { id: 6, licenseTypeId: 5, name: 'Lei n.º 47/VIII/2014', legislationTypeId: 2, publicationDate: '2014-06-15' },
      // Agências de Viagens
-    { id: 7, licenseTypeId: 10, name: 'Decreto-Lei n.º 24/2015', type: 'Decreto-Lei', publicationDate: '2015-05-20' },
+    { id: 7, licenseTypeId: 10, name: 'Decreto-Lei n.º 24/2015', legislationTypeId: 1, publicationDate: '2015-05-20' },
     // Turismo - Alojamento Local
-    { id: 8, licenseTypeId: 7, name: 'Lei n.º 100/VIII/2015', type: 'Lei de Bases', publicationDate: '2015-08-10' },
+    { id: 8, licenseTypeId: 7, name: 'Lei n.º 100/VIII/2015', legislationTypeId: 2, publicationDate: '2015-08-10' },
 ];
 
 export const FEES: Fee[] = [
@@ -101,12 +126,12 @@ export const FEES: Fee[] = [
 ];
 
 export const INFRACTIONS: Infraction[] = [
-    { id: 1, licenseTypeId: 1, name: 'Exploração de empreendimento turístico sem a devida licença', minFine: 50000, maxFine: 200000 },
-    { id: 2, licenseTypeId: 1, name: 'Publicidade enganosa sobre a classificação do estabelecimento', minFine: 20000, maxFine: 80000 },
-    { id: 3, licenseTypeId: 4, name: 'Exercício de atividade comercial sem o alvará de licença', minFine: 30000, maxFine: 150000 },
-    { id: 4, licenseTypeId: 4, name: 'Violação das normas de higiene e segurança alimentar', minFine: 15000, maxFine: 75000 },
-    { id: 5, licenseTypeId: 5, name: 'Funcionamento de estabelecimento industrial da Classe 1 sem licença', minFine: 100000, maxFine: 500000 },
-    { id: 6, licenseTypeId: 12, name: 'Realização de obra sem licença de construção', minFine: 80000, maxFine: 400000 },
-    { id: 7, licenseTypeId: 5, name: 'Descarga de efluentes não tratados', minFine: 200000, maxFine: 1000000 },
-    { id: 8, licenseTypeId: 3, name: 'Pesca em período de defeso', minFine: 50000, maxFine: 250000 },
+    { id: 1, licenseTypeId: 1, name: 'Exploração de empreendimento turístico sem a devida licença', infractionTypeId: 3, minFine: 50000, maxFine: 200000 },
+    { id: 2, licenseTypeId: 1, name: 'Publicidade enganosa sobre a classificação do estabelecimento', infractionTypeId: 2, minFine: 20000, maxFine: 80000 },
+    { id: 3, licenseTypeId: 4, name: 'Exercício de atividade comercial sem o alvará de licença', infractionTypeId: 3, minFine: 30000, maxFine: 150000 },
+    { id: 4, licenseTypeId: 4, name: 'Violação das normas de higiene e segurança alimentar', infractionTypeId: 2, minFine: 15000, maxFine: 75000 },
+    { id: 5, licenseTypeId: 5, name: 'Funcionamento de estabelecimento industrial da Classe 1 sem licença', infractionTypeId: 3, minFine: 100000, maxFine: 500000 },
+    { id: 6, licenseTypeId: 12, name: 'Realização de obra sem licença de construção', infractionTypeId: 3, minFine: 80000, maxFine: 400000 },
+    { id: 7, licenseTypeId: 5, name: 'Descarga de efluentes não tratados', infractionTypeId: 3, minFine: 200000, maxFine: 1000000 },
+    { id: 8, licenseTypeId: 3, name: 'Pesca em período de defeso', infractionTypeId: 2, minFine: 50000, maxFine: 250000 },
 ];

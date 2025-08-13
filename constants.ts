@@ -1,4 +1,12 @@
-import { Sector, Category, LicenseType, SectorType, Legislation, Fee, Infraction, LicensingModel, ValidityUnit, Entity, EntityType } from './types';
+import { Sector, Category, LicenseType, SectorType, Legislation, Fee, Infraction, LicensingModel, ValidityUnit, Entity, EntityType, LicenseEntity } from './types';
+
+export const LICENSE_ENTITIES: LicenseEntity[] = [
+    { id: 1, licenseTypeId: 1, entityId: 1 }, // Licença de Hotel -> IGAE
+    { id: 2, licenseTypeId: 1, entityId: 4 }, // Licença de Hotel -> Bombeiros
+    { id: 3, licenseTypeId: 2, entityId: 1 }, // Alvará de Restauração -> IGAE
+    { id: 4, licenseTypeId: 2, entityId: 5 }, // Alvará de Restauração -> Delegacia de Saúde
+    { id: 5, licenseTypeId: 4, entityId: 3 }, // Alvará de Comércio -> Câmara Municipal da Praia
+];
 
 export const ENTITIES: Entity[] = [
   { id: 1, name: 'IGAE', type: EntityType.Decisao, email: 'geral@igae.cv', phone: '123456789', createdAt: Date.now() - 50000 },

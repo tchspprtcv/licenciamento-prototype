@@ -7,7 +7,8 @@ import {
     LEGISLATIONS as initialLegislations,
     FEES as initialFees,
     INFRACTIONS as initialInfractions,
-    ENTITIES as initialEntities
+    ENTITIES as initialEntities,
+    LICENSE_ENTITIES as initialLicenseEntities
 } from '../constants';
 
 interface DataContextType {
@@ -18,6 +19,7 @@ interface DataContextType {
     fees: Fee[];
     infractions: Infraction[];
     entities: Entity[];
+    licenseEntities: LicenseEntity[];
     getSectorById: (id: number) => Sector | undefined;
     addSector: (sector: Omit<Sector, 'id' | 'categoryCount' | 'licenseCount' | 'createdAt'>) => void;
     updateSector: (sector: Sector) => void;
@@ -40,6 +42,8 @@ interface DataContextType {
     addEntity: (entity: Omit<Entity, 'id' | 'createdAt'>) => void;
     updateEntity: (entity: Entity) => void;
     deleteEntity: (id: number) => void;
+    associateEntityToLicense: (licenseTypeId: number, entityId: number) => void;
+    dissociateEntityFromLicense: (associationId: number) => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -52,6 +56,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     const [fees, setFees] = useState<Fee[]>(initialFees);
     const [infractions, setInfractions] = useState<Infraction[]>(initialInfractions);
     const [entities, setEntities] = useState<Entity[]>(initialEntities);
+    const [licenseEntities, setLicenseEntities] = useState<LicenseEntity[]>(initialLicenseEntities);
 
     // --- Sector Management ---
     const getSectorById = (id: number) => {
@@ -225,6 +230,20 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         setEntities(prev => prev.filter(e => e.id !== id));
     };
 
+    // --- License-Entity Association Management ---
+    const associateEntityToLicense = (licenseTypeId: number, entityId: number) => {
+        const newAssociation: LicenseEntity = {
+            id: Date.now(),
+            licenseTypeId,
+            entityId,
+        };
+        setLicenseEntities(prev => [...prev, newAssociation]);
+    };
+
+    const dissociateEntityFromLicense = (associationId: number) => {
+        setLicenseEntities(prev => prev.filter(assoc => assoc.id !== associationId));
+    };
+
     const value = {
         sectors,
         categories,
@@ -233,6 +252,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         fees,
         infractions,
         entities,
+        licenseEntities,
         getSectorById,
         addSector,
         updateSector,
@@ -254,7 +274,9 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         getEntityById,
         addEntity,
         updateEntity,
-        deleteEntity
+        deleteEntity,
+        associateEntityToLicense,
+        dissociateEntityFromLicense
     };
 
     return (

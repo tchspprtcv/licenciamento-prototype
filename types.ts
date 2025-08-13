@@ -92,3 +92,9 @@ export interface Entity {
     phone?: string;
     createdAt: number;
 }
+
+export interface LicenseEntity {
+    id: number;
+    licenseTypeId: number;
+    entityId: number;
+}

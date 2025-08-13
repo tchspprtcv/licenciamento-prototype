@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation, Link, useNavigationType } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
@@ -22,18 +22,8 @@ const translatePath = (path: string): string => {
 }
 
 export const Breadcrumb = () => {
-  // Check if we're in a Router context
-  let location;
-  let pathnames = [];
-  
-  try {
-    // This will throw an error if not in a Router context
-    location = useLocation();
-    pathnames = location.pathname.split('/').filter(x => x);
-  } catch (error) {
-    // If not in a Router context, return a simple title
-    return <h2 className="text-2xl font-semibold text-gray-800">Dashboard</h2>;
-  }
+  const location = useLocation();
+  const pathnames = location.pathname.split('/').filter(x => x);
 
   if (pathnames.length === 0) {
     return <h2 className="text-2xl font-semibold text-gray-800">Dashboard</h2>;

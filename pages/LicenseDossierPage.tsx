@@ -22,7 +22,14 @@ const Trash2Icon = (props: React.SVGProps<SVGSVGElement>) => (
 export const LicenseDossierPage = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { getLicenseTypeById, updateLicenseType, legislations, addLegislation, deleteLegislation, fees, addFee, deleteFee, infractions, addInfraction, deleteInfraction } = useData();
+    const {
+        getLicenseTypeById,
+        updateLicenseType,
+        legislations, addLegislation, deleteLegislation,
+        fees, addFee, deleteFee,
+        infractions, addInfraction, deleteInfraction,
+        entities, licenseEntities, associateEntityToLicense, dissociateEntityFromLicense
+    } = useData();
 
 
     const [license, setLicense] = useState<LicenseType | null>(null);
@@ -39,10 +46,19 @@ export const LicenseDossierPage = () => {
     const [newLegislation, setNewLegislation] = useState({ name: '', type: '', publicationDate: '' });
     const [newFee, setNewFee] = useState({ process: '', value: 0, status: 'Activo' as 'Activo' | 'Inactivo' });
     const [newInfraction, setNewInfraction] = useState({ name: '', minFine: 0, maxFine: 0 });
+    const [selectedEntityId, setSelectedEntityId] = useState('');
 
     const licenseLegislations = id ? legislations.filter(l => l.licenseTypeId === parseInt(id)) : [];
     const licenseFees = id ? fees.filter(f => f.licenseTypeId === parseInt(id)) : [];
     const licenseInfractions = id ? infractions.filter(i => i.licenseTypeId === parseInt(id)) : [];
+
+    const associatedEntities = id ? licenseEntities
+        .filter(assoc => assoc.licenseTypeId === parseInt(id))
+        .map(assoc => ({ ...assoc, entity: entities.find(e => e.id === assoc.entityId) }))
+        .filter(assoc => assoc.entity) : [];
+
+    const associatedEntityIds = new Set(associatedEntities.map(assoc => assoc.entity.id));
+    const availableEntities = entities.filter(e => !associatedEntityIds.has(e.id));
 
 
     const handleGeneralDataChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -308,7 +324,57 @@ export const LicenseDossierPage = () => {
                     </TabsContent>
 
                     <TabsContent value="entidades">
-                        <p className="p-4 text-gray-500">Funcionalidade de gestão de Entidades ainda não implementada.</p>
+                        <Card>
+                            <CardHeader><CardTitle>Entidades Associadas</CardTitle></CardHeader>
+                            <CardContent>
+                                {associatedEntities.length > 0 ? (
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Nome da Entidade</TableHead>
+                                                <TableHead>Tipo</TableHead>
+                                                <TableHead className="text-right">Ações</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {associatedEntities.map(assoc => (
+                                                <TableRow key={assoc.id}>
+                                                    <TableCell>{assoc.entity.name}</TableCell>
+                                                    <TableCell>{assoc.entity.type}</TableCell>
+                                                    <TableCell className="text-right">
+                                                        <Button variant="ghost" size="sm" onClick={() => dissociateEntityFromLicense(assoc.id)}>
+                                                            <Trash2Icon className="w-4 h-4 text-cv-red" />
+                                                        </Button>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                ) : (
+                                    <p className="p-4 text-center text-gray-500">Nenhuma entidade associada.</p>
+                                )}
+                            </CardContent>
+                            <CardFooter className="border-t pt-4">
+                                <form onSubmit={(e) => {
+                                    e.preventDefault();
+                                    if (selectedEntityId) {
+                                        associateEntityToLicense(license.id, parseInt(selectedEntityId));
+                                        setSelectedEntityId('');
+                                    }
+                                }} className="flex items-end space-x-4 w-full">
+                                    <div className="flex-grow">
+                                        <label htmlFor="entity-select" className="text-sm font-medium">Associar Nova Entidade</label>
+                                        <Select id="entity-select" value={selectedEntityId} onChange={(e) => setSelectedEntityId(e.target.value)} required>
+                                            <option value="" disabled>Selecione uma entidade</option>
+                                            {availableEntities.map(entity => (
+                                                <option key={entity.id} value={entity.id}>{entity.name}</option>
+                                            ))}
+                                        </Select>
+                                    </div>
+                                    <Button type="submit" disabled={!selectedEntityId}>Associar</Button>
+                                </form>
+                            </CardFooter>
+                        </Card>
                     </TabsContent>
 
                     <TabsContent value="processos">

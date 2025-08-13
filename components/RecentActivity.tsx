@@ -4,12 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
 import { Link } from 'react-router-dom';
 
 export const RecentActivity = () => {
-    const { sectors, categories, licenseTypes } = useData();
+    const { sectors, categories, licenseTypes, entities } = useData();
 
     const allItems = [
         ...sectors.map(item => ({ ...item, type: 'Setor', path: `/setores/${item.id}` })),
         ...categories.map(item => ({ ...item, type: 'Categoria', path: `/categorias/${item.id}` })),
         ...licenseTypes.map(item => ({ ...item, type: 'Tipo de Licença', path: `/licencas/${item.id}` })),
+        ...entities.map(item => ({ ...item, type: 'Entidade', path: `/entidades/${item.id}` })),
     ];
 
     const recentItems = allItems.sort((a, b) => b.createdAt - a.createdAt).slice(0, 5);
@@ -19,6 +20,7 @@ export const RecentActivity = () => {
             case 'Setor': return <LayersIcon className="h-5 w-5 text-cv-blue" />;
             case 'Categoria': return <GridIcon className="h-5 w-5 text-cv-red" />;
             case 'Tipo de Licença': return <FileTextIcon className="h-5 w-5 text-cv-yellow" />;
+            case 'Entidade': return <UsersIcon className="h-5 w-5 text-green-500" />;
             default: return null;
         }
     }
@@ -51,6 +53,15 @@ export const RecentActivity = () => {
 };
 
 // Icons
+const UsersIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </svg>
+);
+
 const LayersIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <polygon points="12 2 2 7 12 12 22 7 12 2" />

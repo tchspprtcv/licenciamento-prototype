@@ -13,6 +13,7 @@ export interface Sector {
   cae?: string;
   categoryCount: number;
   licenseCount: number;
+  createdAt: number;
 }
 
 export interface Category {
@@ -22,6 +23,7 @@ export interface Category {
   parentId?: number;
   codCAE?: string;
   licenseCount: number;
+  createdAt: number;
 }
 
 export enum LicensingModel {
@@ -41,6 +43,7 @@ export interface LicenseType {
   sectorId: number;
   categoryId: number;
   subcategoryId?: number;
+  createdAt: number;
   // Fields for Dossier -> Dados Gerais
   description?: string;
   licensingModel?: LicensingModel;
@@ -73,4 +76,19 @@ export interface Infraction {
     name: string;
     minFine: number;
     maxFine: number;
+}
+
+export enum EntityType {
+    Decisao = 'Decisão',
+    Parecer = 'Parecer',
+    Vistoria = 'Vistoria',
+}
+
+export interface Entity {
+    id: number;
+    name: string;
+    type: EntityType;
+    email?: string;
+    phone?: string;
+    createdAt: number;
 }

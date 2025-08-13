@@ -12,6 +12,8 @@ import { LicensesListPage } from './pages/LicensesListPage';
 import { LicenseDetailPage } from './pages/LicenseDetailPage';
 import { LicenseDossierPage } from './pages/LicenseDossierPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { EntitiesListPage } from './pages/EntitiesListPage';
+import { EntityDetailPage } from './pages/EntityDetailPage';
 
 function App() {
   return (
@@ -29,6 +31,9 @@ function App() {
           <Route path="/licencas/novo" element={<LicenseDetailPage />} />
           <Route path="/licencas/:id" element={<LicenseDetailPage />} />
           <Route path="/licencas/dossier/:id" element={<LicenseDossierPage />} />
+          <Route path="/entidades" element={<EntitiesListPage />} />
+          <Route path="/entidades/novo" element={<EntityDetailPage />} />
+          <Route path="/entidades/:id" element={<EntityDetailPage />} />
           <Route path="/parametrizacao" element={<SettingsPage />} />
         </Routes>
       </Layout>

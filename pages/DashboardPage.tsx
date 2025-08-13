@@ -1,6 +1,8 @@
 import React from 'react';
+import { useData } from '../context/DataContext';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
-import { SECTORS, CATEGORIES, LICENSE_TYPES } from '../constants';
+import { SectorChart } from '../components/charts/SectorChart';
+import { RecentActivity } from '../components/RecentActivity';
 
 const StatCard = ({ title, value, icon, color }: { title: string; value: number; icon: React.ReactElement<React.SVGProps<SVGSVGElement>>; color: string }) => (
     <Card className="shadow-lg">
@@ -16,12 +18,19 @@ const StatCard = ({ title, value, icon, color }: { title: string; value: number;
 );
 
 export const DashboardPage = () => {
+  const { sectors, categories, licenseTypes } = useData();
+
   return (
     <div className="space-y-6">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <StatCard title="Setores Económicos" value={SECTORS.length} icon={<LayersIcon />} color="text-cv-blue" />
-        <StatCard title="Categorias de Atividade" value={CATEGORIES.length} icon={<GridIcon />} color="text-cv-red" />
-        <StatCard title="Tipos de Licença" value={LICENSE_TYPES.length} icon={<FileTextIcon />} color="text-cv-yellow" />
+        <StatCard title="Setores Económicos" value={sectors.length} icon={<LayersIcon />} color="text-cv-blue" />
+        <StatCard title="Categorias de Atividade" value={categories.length} icon={<GridIcon />} color="text-cv-red" />
+        <StatCard title="Tipos de Licença" value={licenseTypes.length} icon={<FileTextIcon />} color="text-cv-yellow" />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <SectorChart />
+        <RecentActivity />
       </div>
 
       <Card>

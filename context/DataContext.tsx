@@ -6,7 +6,8 @@ import {
     LICENSE_TYPES as initialLicenseTypes,
     LEGISLATIONS as initialLegislations,
     FEES as initialFees,
-    INFRACTIONS as initialInfractions
+    INFRACTIONS as initialInfractions,
+    ENTITIES as initialEntities
 } from '../constants';
 
 interface DataContextType {
@@ -16,16 +17,17 @@ interface DataContextType {
     legislations: Legislation[];
     fees: Fee[];
     infractions: Infraction[];
+    entities: Entity[];
     getSectorById: (id: number) => Sector | undefined;
-    addSector: (sector: Omit<Sector, 'id' | 'categoryCount' | 'licenseCount'>) => void;
+    addSector: (sector: Omit<Sector, 'id' | 'categoryCount' | 'licenseCount' | 'createdAt'>) => void;
     updateSector: (sector: Sector) => void;
     deleteSector: (id: number) => boolean;
     getCategoryById: (id: number) => Category | undefined;
-    addCategory: (category: Omit<Category, 'id' | 'licenseCount'>) => void;
+    addCategory: (category: Omit<Category, 'id' | 'licenseCount' | 'createdAt'>) => void;
     updateCategory: (category: Category) => void;
     deleteCategory: (id: number) => boolean;
     getLicenseTypeById: (id: number) => LicenseType | undefined;
-    addLicenseType: (licenseType: Omit<LicenseType, 'id'>) => void;
+    addLicenseType: (licenseType: Omit<LicenseType, 'id' | 'createdAt'>) => void;
     updateLicenseType: (licenseType: LicenseType) => void;
     deleteLicenseType: (id: number) => boolean;
     addLegislation: (legislation: Omit<Legislation, 'id'>) => void;
@@ -34,6 +36,10 @@ interface DataContextType {
     deleteFee: (id: number) => void;
     addInfraction: (infraction: Omit<Infraction, 'id'>) => void;
     deleteInfraction: (id: number) => void;
+    getEntityById: (id: number) => Entity | undefined;
+    addEntity: (entity: Omit<Entity, 'id' | 'createdAt'>) => void;
+    updateEntity: (entity: Entity) => void;
+    deleteEntity: (id: number) => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -45,18 +51,20 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     const [legislations, setLegislations] = useState<Legislation[]>(initialLegislations);
     const [fees, setFees] = useState<Fee[]>(initialFees);
     const [infractions, setInfractions] = useState<Infraction[]>(initialInfractions);
+    const [entities, setEntities] = useState<Entity[]>(initialEntities);
 
     // --- Sector Management ---
     const getSectorById = (id: number) => {
         return sectors.find(s => s.id === id);
     };
 
-    const addSector = (sectorData: Omit<Sector, 'id' | 'categoryCount' | 'licenseCount'>) => {
+    const addSector = (sectorData: Omit<Sector, 'id' | 'categoryCount' | 'licenseCount' | 'createdAt'>) => {
         const newSector: Sector = {
             ...sectorData,
             id: Date.now(), // Simple way to generate a unique ID for mock data
             categoryCount: 0,
             licenseCount: 0,
+            createdAt: Date.now(),
         };
         setSectors(prevSectors => [...prevSectors, newSector]);
     };
@@ -85,11 +93,12 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         return categories.find(c => c.id === id);
     };
 
-    const addCategory = (categoryData: Omit<Category, 'id' | 'licenseCount'>) => {
+    const addCategory = (categoryData: Omit<Category, 'id' | 'licenseCount' | 'createdAt'>) => {
         const newCategory: Category = {
             ...categoryData,
             id: Date.now(),
             licenseCount: 0,
+            createdAt: Date.now(),
         };
         setCategories(prev => [...prev, newCategory]);
         // Also update category count in the parent sector
@@ -126,10 +135,11 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         return licenseTypes.find(l => l.id === id);
     };
 
-    const addLicenseType = (licenseTypeData: Omit<LicenseType, 'id'>) => {
+    const addLicenseType = (licenseTypeData: Omit<LicenseType, 'id' | 'createdAt'>) => {
         const newLicenseType: LicenseType = {
             ...licenseTypeData,
             id: Date.now(),
+            createdAt: Date.now(),
         };
         setLicenseTypes(prev => [...prev, newLicenseType]);
         // Update license count on parent sector and category
@@ -192,6 +202,29 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         setInfractions(prev => prev.filter(i => i.id !== id));
     };
 
+    // --- Entity Management ---
+    const getEntityById = (id: number) => {
+        return entities.find(e => e.id === id);
+    };
+
+    const addEntity = (entityData: Omit<Entity, 'id' | 'createdAt'>) => {
+        const newEntity: Entity = {
+            ...entityData,
+            id: Date.now(),
+            createdAt: Date.now(),
+        };
+        setEntities(prev => [...prev, newEntity]);
+    };
+
+    const updateEntity = (updatedEntity: Entity) => {
+        setEntities(prev => prev.map(e => e.id === updatedEntity.id ? updatedEntity : e));
+    };
+
+    const deleteEntity = (id: number) => {
+        // In a real app, check for associations before deleting
+        setEntities(prev => prev.filter(e => e.id !== id));
+    };
+
     const value = {
         sectors,
         categories,
@@ -199,6 +232,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         legislations,
         fees,
         infractions,
+        entities,
         getSectorById,
         addSector,
         updateSector,
@@ -216,7 +250,11 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         addFee,
         deleteFee,
         addInfraction,
-        deleteInfraction
+        deleteInfraction,
+        getEntityById,
+        addEntity,
+        updateEntity,
+        deleteEntity
     };
 
     return (

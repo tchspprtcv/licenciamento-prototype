@@ -39,10 +39,28 @@ export const SettingsPage = () => {
                         icon={<UsersIcon className="w-8 h-8" />}
                     />
                     <SettingsCard
-                        title="Gestão de Utilizadores"
-                        description="Adicionar, editar e remover utilizadores do sistema e gerir as suas permissões."
+                        title="Tipos de Setor"
+                        description="Gerir as classificações de setores (ex: Primário, Secundário, Terciário)."
                         linkTo="#"
-                        icon={<UserCogIcon className="w-8 h-8" />}
+                        icon={<LayersIcon className="w-8 h-8" />}
+                    />
+                     <SettingsCard
+                        title="Tipos de Entidade"
+                        description="Gerir os papéis que as entidades podem ter num processo (ex: Decisão, Parecer)."
+                        linkTo="#"
+                        icon={<MilestoneIcon className="w-8 h-8" />}
+                    />
+                     <SettingsCard
+                        title="Tipos de Legislação"
+                        description="Gerir os tipos de documentos legais que podem ser associados (ex: Lei, Decreto)."
+                        linkTo="#"
+                        icon={<BookMarkedIcon className="w-8 h-8" />}
+                    />
+                     <SettingsCard
+                        title="Tipos de Infração"
+                        description="Gerir as categorias ou classificações para as infrações."
+                        linkTo="#"
+                        icon={<AlertTriangleIcon className="w-8 h-8" />}
                     />
                     <SettingsCard
                         title="Modelos de Documentos"
@@ -63,28 +81,44 @@ export const SettingsPage = () => {
 };
 
 // Icons
+const LayersIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="12 2 2 7 12 12 22 7 12 2" />
+      <polyline points="2 17 12 22 22 17" />
+      <polyline points="2 12 12 17 22 12" />
+    </svg>
+);
+
+const MilestoneIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22V2" />
+        <path d="M18 6l-6 6-6-6" />
+    </svg>
+);
+
+const BookMarkedIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+        <path d="M12 13V7" />
+        <path d="m9 10 3-3 3 3" />
+    </svg>
+);
+
+const AlertTriangleIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+        <path d="M12 9v4" />
+        <path d="M12 17h.01" />
+    </svg>
+);
+
 const UsersIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
         <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-    </svg>
-);
-
-const UserCogIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="18" cy="15" r="3" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M10 15H6a4 4 0 0 0-4 4v2" />
-        <path d="m21.7 16.4-.9-.3" />
-        <path d="m15.2 13.9-.9-.3" />
-        <path d="m16.6 18.7.3-.9" />
-        <path d="m19.1 12.2.3-.9" />
-        <path d="m19.6 18.7-.4-1" />
-        <path d="m16.8 12.3-.4-1" />
-        <path d="m14.3 16.6 1-.4" />
-        <path d="m20.7 13.8 1-.4" />
     </svg>
 );
 

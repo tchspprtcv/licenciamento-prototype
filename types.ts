@@ -25,15 +25,14 @@ export interface Category {
   createdAt: number;
 }
 
-export enum LicensingModel {
-    ProvisorioDefinitivo = 'Provisório + Definitivo',
-    Definitivo = 'Definitivo',
+export interface LicensingModel {
+    id: number;
+    name: string;
 }
 
-export enum ValidityUnit {
-    Dias = 'dias',
-    Meses = 'meses',
-    Anos = 'anos',
+export interface ValidityUnit {
+    id: number;
+    name: string;
 }
 
 export interface LicenseType {
@@ -45,8 +44,8 @@ export interface LicenseType {
   createdAt: number;
   // Fields for Dossier -> Dados Gerais
   description?: string;
-  licensingModel?: LicensingModel;
-  validityUnit?: ValidityUnit;
+  licensingModelId?: number;
+  validityUnitId?: number;
   validityValue?: number;
   isLifetime?: boolean;
 }

@@ -5,6 +5,8 @@ import {
     SECTOR_TYPES as initialSectorTypes,
     CATEGORIES as initialCategories,
     LICENSE_TYPES as initialLicenseTypes,
+    LICENSING_MODELS as initialLicensingModels,
+    VALIDITY_UNITS as initialValidityUnits,
     LEGISLATIONS as initialLegislations,
     LEGISLATION_TYPES as initialLegislationTypes,
     FEES as initialFees,
@@ -20,6 +22,8 @@ interface DataContextType {
     sectorTypes: SectorType[];
     categories: Category[];
     licenseTypes: LicenseType[];
+    licensingModels: LicensingModel[];
+    validityUnits: ValidityUnit[];
     legislations: Legislation[];
     legislationTypes: LegislationType[];
     fees: Fee[];
@@ -36,6 +40,14 @@ interface DataContextType {
     addSectorType: (sectorType: Omit<SectorType, 'id'>) => void;
     updateSectorType: (sectorType: SectorType) => void;
     deleteSectorType: (id: number) => void;
+    getLicensingModelById: (id: number) => LicensingModel | undefined;
+    addLicensingModel: (licensingModel: Omit<LicensingModel, 'id'>) => void;
+    updateLicensingModel: (licensingModel: LicensingModel) => void;
+    deleteLicensingModel: (id: number) => void;
+    getValidityUnitById: (id: number) => ValidityUnit | undefined;
+    addValidityUnit: (validityUnit: Omit<ValidityUnit, 'id'>) => void;
+    updateValidityUnit: (validityUnit: ValidityUnit) => void;
+    deleteValidityUnit: (id: number) => void;
     getCategoryById: (id: number) => Category | undefined;
     addCategory: (category: Omit<Category, 'id' | 'licenseCount' | 'createdAt'>) => void;
     updateCategory: (category: Category) => void;
@@ -77,6 +89,8 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     const [sectorTypes, setSectorTypes] = useState<SectorType[]>(initialSectorTypes);
     const [categories, setCategories] = useState<Category[]>(initialCategories);
     const [licenseTypes, setLicenseTypes] = useState<LicenseType[]>(initialLicenseTypes);
+    const [licensingModels, setLicensingModels] = useState<LicensingModel[]>(initialLicensingModels);
+    const [validityUnits, setValidityUnits] = useState<ValidityUnit[]>(initialValidityUnits);
     const [legislations, setLegislations] = useState<Legislation[]>(initialLegislations);
     const [legislationTypes, setLegislationTypes] = useState<LegislationType[]>(initialLegislationTypes);
     const [fees, setFees] = useState<Fee[]>(initialFees);
@@ -357,11 +371,55 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         setSectorTypes(prev => prev.filter(st => st.id !== id));
     };
 
+    // --- Licensing Model Management ---
+    const getLicensingModelById = (id: number) => {
+        return licensingModels.find(lm => lm.id === id);
+    };
+
+    const addLicensingModel = (licensingModelData: Omit<LicensingModel, 'id'>) => {
+        const newLicensingModel: LicensingModel = {
+            ...licensingModelData,
+            id: Date.now(),
+        };
+        setLicensingModels(prev => [...prev, newLicensingModel]);
+    };
+
+    const updateLicensingModel = (updatedLicensingModel: LicensingModel) => {
+        setLicensingModels(prev => prev.map(lm => lm.id === updatedLicensingModel.id ? updatedLicensingModel : lm));
+    };
+
+    const deleteLicensingModel = (id: number) => {
+        setLicensingModels(prev => prev.filter(lm => lm.id !== id));
+    };
+
+    // --- Validity Unit Management ---
+    const getValidityUnitById = (id: number) => {
+        return validityUnits.find(vu => vu.id === id);
+    };
+
+    const addValidityUnit = (validityUnitData: Omit<ValidityUnit, 'id'>) => {
+        const newValidityUnit: ValidityUnit = {
+            ...validityUnitData,
+            id: Date.now(),
+        };
+        setValidityUnits(prev => [...prev, newValidityUnit]);
+    };
+
+    const updateValidityUnit = (updatedValidityUnit: ValidityUnit) => {
+        setValidityUnits(prev => prev.map(vu => vu.id === updatedValidityUnit.id ? updatedValidityUnit : vu));
+    };
+
+    const deleteValidityUnit = (id: number) => {
+        setValidityUnits(prev => prev.filter(vu => vu.id !== id));
+    };
+
     const value = {
         sectors,
         sectorTypes,
         categories,
         licenseTypes,
+        licensingModels,
+        validityUnits,
         legislations,
         legislationTypes,
         fees,
@@ -392,6 +450,14 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         addLegislationType,
         updateLegislationType,
         deleteLegislationType,
+        getLicensingModelById,
+        addLicensingModel,
+        updateLicensingModel,
+        deleteLicensingModel,
+        getValidityUnitById,
+        addValidityUnit,
+        updateValidityUnit,
+        deleteValidityUnit,
         addFee,
         deleteFee,
         addInfraction,

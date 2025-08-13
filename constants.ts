@@ -1,5 +1,16 @@
 import { Sector, Category, LicenseType, SectorType, Legislation, Fee, Infraction, LicensingModel, ValidityUnit, Entity, EntityType, LicenseEntity, LegislationType, InfractionType } from './types';
 
+export const LICENSING_MODELS: LicensingModel[] = [
+    { id: 1, name: 'Provisório + Definitivo' },
+    { id: 2, name: 'Definitivo' },
+];
+
+export const VALIDITY_UNITS: ValidityUnit[] = [
+    { id: 1, name: 'dias' },
+    { id: 2, name: 'meses' },
+    { id: 3, name: 'anos' },
+];
+
 export const SECTOR_TYPES: SectorType[] = [
     { id: 1, name: 'Primário' },
     { id: 2, name: 'Secundário' },
@@ -77,21 +88,21 @@ export const CATEGORIES: Category[] = [
 ];
 
 export const LICENSE_TYPES: LicenseType[] = [
-  { id: 1, name: 'Licença de Utilização Turística (Hotel)', sectorId: 5, categoryId: 2, createdAt: Date.now() - 15000, description: 'Licença para hotéis e similares.', licensingModel: LicensingModel.ProvisorioDefinitivo, validityUnit: ValidityUnit.Anos, validityValue: 5, isLifetime: false },
-  { id: 2, name: 'Alvará de Licença de Funcionamento (Restauração)', sectorId: 5, categoryId: 3, createdAt: Date.now() - 14000, description: 'Alvará para restaurantes e bares.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 1, isLifetime: false },
-  { id: 3, name: 'Licença de Pesca Industrial', sectorId: 2, categoryId: 4, createdAt: Date.now() - 13000, description: 'Licença para pesca em alto mar.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 2, isLifetime: false },
-  { id: 4, name: 'Alvará de Licença de Funcionamento (Comércio)', sectorId: 6, categoryId: 5, createdAt: Date.now() - 12000, description: 'Alvará para lojas e estabelecimentos comerciais.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 1, isLifetime: false },
-  { id: 5, name: 'Licença de Atividade Industrial', sectorId: 3, categoryId: 6, createdAt: Date.now() - 11000, description: 'Licença para unidades industriais.', licensingModel: LicensingModel.ProvisorioDefinitivo, validityUnit: ValidityUnit.Anos, validityValue: 3, isLifetime: false },
-  { id: 6, name: 'Licença de Utilização Turística (Aldeamento)', sectorId: 5, categoryId: 7, createdAt: Date.now() - 10000, description: 'Licença para aldeamentos turísticos.', licensingModel: LicensingModel.ProvisorioDefinitivo, validityUnit: ValidityUnit.Anos, validityValue: 5, isLifetime: false },
-  { id: 7, name: 'Registo de Alojamento Local', sectorId: 5, categoryId: 8, createdAt: Date.now() - 9000, description: 'Registo para exploração de alojamento local.', licensingModel: LicensingModel.Definitivo, isLifetime: true },
-  { id: 8, name: 'Alvará de Funcionamento (Restaurante)', sectorId: 5, categoryId: 9, createdAt: Date.now() - 8000, description: 'Alvará para restaurantes.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 1, isLifetime: false },
-  { id: 9, name: 'Alvará de Funcionamento (Bar)', sectorId: 5, categoryId: 10, createdAt: Date.now() - 7000, description: 'Alvará para bares e similares.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 1, isLifetime: false },
-  { id: 10, name: 'Licença de Agência de Viagens e Turismo', sectorId: 5, categoryId: 11, createdAt: Date.now() - 6000, description: 'Licença para agências de viagens.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 2, isLifetime: false },
-  { id: 11, name: 'Licença de Animação Turística', sectorId: 5, categoryId: 12, createdAt: Date.now() - 5000, description: 'Licença para empresas de animação turística.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 2, isLifetime: false },
-  { id: 12, name: 'Licença de Construção', sectorId: 4, categoryId: 13, createdAt: Date.now() - 4000, description: 'Licença de construção de obras.', licensingModel: LicensingModel.ProvisorioDefinitivo, validityUnit: ValidityUnit.Meses, validityValue: 12, isLifetime: false },
-  { id: 13, name: 'Licença de Pesca Artesanal', sectorId: 2, categoryId: 14, createdAt: Date.now() - 3000, description: 'Licença para pesca costeira.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 1, isLifetime: false },
-  { id: 14, name: 'Licença de Extração de Inertes', sectorId: 7, categoryId: 15, createdAt: Date.now() - 2000, description: 'Licença para extração de areia, burgau, etc.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 1, isLifetime: false },
-  { id: 15, name: 'Licença de Produção de Energia', sectorId: 8, categoryId: 16, createdAt: Date.now() - 1000, description: 'Licença para produção de energia.', licensingModel: LicensingModel.ProvisorioDefinitivo, validityUnit: ValidityUnit.Anos, validityValue: 10, isLifetime: false },
+  { id: 1, name: 'Licença de Utilização Turística (Hotel)', sectorId: 5, categoryId: 2, createdAt: Date.now() - 15000, description: 'Licença para hotéis e similares.', licensingModelId: 1, validityUnitId: 3, validityValue: 5, isLifetime: false },
+  { id: 2, name: 'Alvará de Licença de Funcionamento (Restauração)', sectorId: 5, categoryId: 3, createdAt: Date.now() - 14000, description: 'Alvará para restaurantes e bares.', licensingModelId: 2, validityUnitId: 3, validityValue: 1, isLifetime: false },
+  { id: 3, name: 'Licença de Pesca Industrial', sectorId: 2, categoryId: 4, createdAt: Date.now() - 13000, description: 'Licença para pesca em alto mar.', licensingModelId: 2, validityUnitId: 3, validityValue: 2, isLifetime: false },
+  { id: 4, name: 'Alvará de Licença de Funcionamento (Comércio)', sectorId: 6, categoryId: 5, createdAt: Date.now() - 12000, description: 'Alvará para lojas e estabelecimentos comerciais.', licensingModelId: 2, validityUnitId: 3, validityValue: 1, isLifetime: false },
+  { id: 5, name: 'Licença de Atividade Industrial', sectorId: 3, categoryId: 6, createdAt: Date.now() - 11000, description: 'Licença para unidades industriais.', licensingModelId: 1, validityUnitId: 3, validityValue: 3, isLifetime: false },
+  { id: 6, name: 'Licença de Utilização Turística (Aldeamento)', sectorId: 5, categoryId: 7, createdAt: Date.now() - 10000, description: 'Licença para aldeamentos turísticos.', licensingModelId: 1, validityUnitId: 3, validityValue: 5, isLifetime: false },
+  { id: 7, name: 'Registo de Alojamento Local', sectorId: 5, categoryId: 8, createdAt: Date.now() - 9000, description: 'Registo para exploração de alojamento local.', licensingModelId: 2, isLifetime: true },
+  { id: 8, name: 'Alvará de Funcionamento (Restaurante)', sectorId: 5, categoryId: 9, createdAt: Date.now() - 8000, description: 'Alvará para restaurantes.', licensingModelId: 2, validityUnitId: 3, validityValue: 1, isLifetime: false },
+  { id: 9, name: 'Alvará de Funcionamento (Bar)', sectorId: 5, categoryId: 10, createdAt: Date.now() - 7000, description: 'Alvará para bares e similares.', licensingModelId: 2, validityUnitId: 3, validityValue: 1, isLifetime: false },
+  { id: 10, name: 'Licença de Agência de Viagens e Turismo', sectorId: 5, categoryId: 11, createdAt: Date.now() - 6000, description: 'Licença para agências de viagens.', licensingModelId: 2, validityUnitId: 3, validityValue: 2, isLifetime: false },
+  { id: 11, name: 'Licença de Animação Turística', sectorId: 5, categoryId: 12, createdAt: Date.now() - 5000, description: 'Licença para empresas de animação turística.', licensingModelId: 2, validityUnitId: 3, validityValue: 2, isLifetime: false },
+  { id: 12, name: 'Licença de Construção', sectorId: 4, categoryId: 13, createdAt: Date.now() - 4000, description: 'Licença de construção de obras.', licensingModelId: 1, validityUnitId: 2, validityValue: 12, isLifetime: false },
+  { id: 13, name: 'Licença de Pesca Artesanal', sectorId: 2, categoryId: 14, createdAt: Date.now() - 3000, description: 'Licença para pesca costeira.', licensingModelId: 2, validityUnitId: 3, validityValue: 1, isLifetime: false },
+  { id: 14, name: 'Licença de Extração de Inertes', sectorId: 7, categoryId: 15, createdAt: Date.now() - 2000, description: 'Licença para extração de areia, burgau, etc.', licensingModelId: 2, validityUnitId: 3, validityValue: 1, isLifetime: false },
+  { id: 15, name: 'Licença de Produção de Energia', sectorId: 8, categoryId: 16, createdAt: Date.now() - 1000, description: 'Licença para produção de energia.', licensingModelId: 1, validityUnitId: 3, validityValue: 10, isLifetime: false },
 ];
 
 export const LEGISLATIONS: Legislation[] = [

@@ -27,6 +27,8 @@ export const LicenseDossierPage = () => {
         updateLicenseType,
         legislations, addLegislation, deleteLegislation,
         legislationTypes,
+        licensingModels,
+        validityUnits,
         fees, addFee, deleteFee,
         infractions, addInfraction, deleteInfraction,
         infractionTypes,
@@ -119,9 +121,10 @@ export const LicenseDossierPage = () => {
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label htmlFor="licensingModel" className="block text-sm font-medium text-gray-700 mb-1">Modelo de Licenciamento</label>
-                                            <Select id="licensingModel" name="licensingModel" value={license.licensingModel || ''} onChange={handleGeneralDataChange}>
-                                                {Object.values(LicensingModel).map(model => <option key={model} value={model}>{model}</option>)}
+                                            <label htmlFor="licensingModelId" className="block text-sm font-medium text-gray-700 mb-1">Modelo de Licenciamento</label>
+                                            <Select id="licensingModelId" name="licensingModelId" value={license.licensingModelId || ''} onChange={handleGeneralDataChange}>
+                                                <option value={0} disabled>Selecione um modelo</option>
+                                                {licensingModels.map(model => <option key={model.id} value={model.id}>{model.name}</option>)}
                                             </Select>
                                         </div>
                                         <div className="flex items-end">
@@ -137,9 +140,10 @@ export const LicenseDossierPage = () => {
                                             <Input type="number" id="validityValue" name="validityValue" value={license.validityValue || ''} onChange={handleGeneralDataChange} disabled={license.isLifetime} />
                                         </div>
                                         <div>
-                                            <label htmlFor="validityUnit" className="block text-sm font-medium text-gray-700 mb-1">Unidade de Validade</label>
-                                            <Select id="validityUnit" name="validityUnit" value={license.validityUnit || ''} onChange={handleGeneralDataChange} disabled={license.isLifetime}>
-                                                {Object.values(ValidityUnit).map(unit => <option key={unit} value={unit}>{unit}</option>)}
+                                            <label htmlFor="validityUnitId" className="block text-sm font-medium text-gray-700 mb-1">Unidade de Validade</label>
+                                            <Select id="validityUnitId" name="validityUnitId" value={license.validityUnitId || ''} onChange={handleGeneralDataChange} disabled={license.isLifetime}>
+                                                <option value={0} disabled>Selecione uma unidade</option>
+                                                {validityUnits.map(unit => <option key={unit.id} value={unit.id}>{unit.name}</option>)}
                                             </Select>
                                         </div>
                                     </div>

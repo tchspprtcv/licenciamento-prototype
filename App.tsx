@@ -22,6 +22,10 @@ import { EntityTypesListPage } from './pages/EntityTypesListPage';
 import { EntityTypeDetailPage } from './pages/EntityTypeDetailPage';
 import { SectorTypesListPage } from './pages/SectorTypesListPage';
 import { SectorTypeDetailPage } from './pages/SectorTypeDetailPage';
+import { LicensingModelsListPage } from './pages/LicensingModelsListPage';
+import { LicensingModelDetailPage } from './pages/LicensingModelDetailPage';
+import { ValidityUnitsListPage } from './pages/ValidityUnitsListPage';
+import { ValidityUnitDetailPage } from './pages/ValidityUnitDetailPage';
 
 function App() {
   return (
@@ -55,6 +59,12 @@ function App() {
           <Route path="/parametrizacao/tipos-setor" element={<SectorTypesListPage />} />
           <Route path="/parametrizacao/tipos-setor/novo" element={<SectorTypeDetailPage />} />
           <Route path="/parametrizacao/tipos-setor/:id" element={<SectorTypeDetailPage />} />
+          <Route path="/parametrizacao/modelos-licenciamento" element={<LicensingModelsListPage />} />
+          <Route path="/parametrizacao/modelos-licenciamento/novo" element={<LicensingModelDetailPage />} />
+          <Route path="/parametrizacao/modelos-licenciamento/:id" element={<LicensingModelDetailPage />} />
+          <Route path="/parametrizacao/unidades-validade" element={<ValidityUnitsListPage />} />
+          <Route path="/parametrizacao/unidades-validade/novo" element={<ValidityUnitDetailPage />} />
+          <Route path="/parametrizacao/unidades-validade/:id" element={<ValidityUnitDetailPage />} />
         </Routes>
       </Layout>
     </DataProvider>

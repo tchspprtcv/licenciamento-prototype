@@ -29,9 +29,14 @@ export const Sidebar = () => {
             <ClipboardListIcon className="w-5 h-5" />
             <span className="mx-4 font-medium">Pedidos de Licença</span>
         </NavLink>
+        <NavLink to="/configuracao/licenciamento" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
+            <SlidersHorizontalIcon className="w-5 h-5" />
+            <span className="mx-4 font-medium">Config. Licenciamento</span>
+        </NavLink>
         <NavLink to="/parametrizacao" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
           <SettingsIcon className="w-5 h-5" />
-          <span className="mx-4 font-medium">Parametrização</span>
+          <span className="mx-4 font-medium">Outras Parametrizações</span>
+          <span className="mx-4 font-medium">Outras Parametrizações</span>
         </NavLink>
       </nav>
     </div>

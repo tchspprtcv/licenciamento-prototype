@@ -86,6 +86,12 @@ export const SettingsPage = () => {
                         linkTo="#"
                         icon={<BanknoteIcon className="w-8 h-8" />}
                     />
+                     <SettingsCard
+                        title="Tipos de Processo"
+                        description="Gerir os tipos de processo de licenciamento e a sua ligação a fluxos BPMN."
+                        linkTo="/parametrizacao/tipos-processo"
+                        icon={<WorkflowIcon className="w-8 h-8" />}
+                    />
                 </div>
             </CardContent>
         </Card>
@@ -164,5 +170,13 @@ const BanknoteIcon = (props: React.SVGProps<SVGSVGElement>) => (
         <circle cx="12" cy="12" r="2" />
         <path d="M6 12h.01" />
         <path d="M18 12h.01" />
+    </svg>
+);
+
+const WorkflowIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect width="8" height="8" x="3" y="3" rx="2" />
+        <path d="M7 11v4a2 2 0 0 0 2 2h4" />
+        <rect width="8" height="8" x="13" y="13" rx="2" />
     </svg>
 );

@@ -1,4 +1,17 @@
-import { Sector, Category, LicenseType, SectorType, Legislation, Fee, Infraction, LicensingModel, ValidityUnit, Entity, EntityType, LicenseEntity, LegislationType, InfractionType } from './types';
+import { Sector, Category, LicenseType, SectorType, Legislation, Fee, Infraction, LicensingModel, ValidityUnit, Entity, EntityType, LicenseEntity, LegislationType, InfractionType, ProcessType, LicenseProcess } from './types';
+
+export const LICENSE_PROCESSES: LicenseProcess[] = [
+    { id: 1, licenseTypeId: 12, processTypeId: 1 }, // Licença de Construção -> Licenciamento de Obras
+    { id: 2, licenseTypeId: 2, processTypeId: 2 }, // Alvará de Restauração -> Licenciamento de Restauração
+    { id: 3, licenseTypeId: 8, processTypeId: 2 }, // Alvará de Restaurante -> Licenciamento de Restauração
+    { id: 4, licenseTypeId: 5, processTypeId: 3 }, // Licença Industrial -> Licenciamento Industrial
+];
+
+export const PROCESS_TYPES: ProcessType[] = [
+    { id: 1, name: 'Licenciamento de Obras', description: 'Processo para licenciamento de construção de obras particulares.', bpmnProcessKey: 'proc_lic_obras_v1' },
+    { id: 2, name: 'Licenciamento de Restauração', description: 'Processo para licenciamento de restaurantes e similares.', bpmnProcessKey: 'proc_lic_rest_v2' },
+    { id: 3, name: 'Licenciamento Industrial', description: 'Processo para licenciamento de atividade industrial.', bpmnProcessKey: 'proc_lic_ind_v1.2' },
+];
 
 export const LICENSING_MODELS: LicensingModel[] = [
     { id: 1, name: 'Provisório + Definitivo' },

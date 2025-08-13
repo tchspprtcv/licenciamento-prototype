@@ -14,7 +14,9 @@ import {
     INFRACTION_TYPES as initialInfractionTypes,
     ENTITIES as initialEntities,
     ENTITY_TYPES as initialEntityTypes,
-    LICENSE_ENTITIES as initialLicenseEntities
+    LICENSE_ENTITIES as initialLicenseEntities,
+    PROCESS_TYPES as initialProcessTypes,
+    LICENSE_PROCESSES as initialLicenseProcesses
 } from '../constants';
 
 interface DataContextType {
@@ -24,6 +26,8 @@ interface DataContextType {
     licenseTypes: LicenseType[];
     licensingModels: LicensingModel[];
     validityUnits: ValidityUnit[];
+    processTypes: ProcessType[];
+    licenseProcesses: LicenseProcess[];
     legislations: Legislation[];
     legislationTypes: LegislationType[];
     fees: Fee[];
@@ -78,8 +82,14 @@ interface DataContextType {
     addEntityType: (entityType: Omit<EntityType, 'id'>) => void;
     updateEntityType: (entityType: EntityType) => void;
     deleteEntityType: (id: number) => void;
+    getProcessTypeById: (id: number) => ProcessType | undefined;
+    addProcessType: (processType: Omit<ProcessType, 'id'>) => void;
+    updateProcessType: (processType: ProcessType) => void;
+    deleteProcessType: (id: number) => void;
     associateEntityToLicense: (licenseTypeId: number, entityId: number) => void;
     dissociateEntityFromLicense: (associationId: number) => void;
+    associateProcessToLicense: (licenseTypeId: number, processTypeId: number) => void;
+    dissociateProcessFromLicense: (associationId: number) => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -91,6 +101,8 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     const [licenseTypes, setLicenseTypes] = useState<LicenseType[]>(initialLicenseTypes);
     const [licensingModels, setLicensingModels] = useState<LicensingModel[]>(initialLicensingModels);
     const [validityUnits, setValidityUnits] = useState<ValidityUnit[]>(initialValidityUnits);
+    const [processTypes, setProcessTypes] = useState<ProcessType[]>(initialProcessTypes);
+    const [licenseProcesses, setLicenseProcesses] = useState<LicenseProcess[]>(initialLicenseProcesses);
     const [legislations, setLegislations] = useState<Legislation[]>(initialLegislations);
     const [legislationTypes, setLegislationTypes] = useState<LegislationType[]>(initialLegislationTypes);
     const [fees, setFees] = useState<Fee[]>(initialFees);
@@ -413,6 +425,41 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         setValidityUnits(prev => prev.filter(vu => vu.id !== id));
     };
 
+    // --- Process Type Management ---
+    const getProcessTypeById = (id: number) => {
+        return processTypes.find(pt => pt.id === id);
+    };
+
+    const addProcessType = (processTypeData: Omit<ProcessType, 'id'>) => {
+        const newProcessType: ProcessType = {
+            ...processTypeData,
+            id: Date.now(),
+        };
+        setProcessTypes(prev => [...prev, newProcessType]);
+    };
+
+    const updateProcessType = (updatedProcessType: ProcessType) => {
+        setProcessTypes(prev => prev.map(pt => pt.id === updatedProcessType.id ? updatedProcessType : pt));
+    };
+
+    const deleteProcessType = (id: number) => {
+        setProcessTypes(prev => prev.filter(pt => pt.id !== id));
+    };
+
+    // --- License-Process Association Management ---
+    const associateProcessToLicense = (licenseTypeId: number, processTypeId: number) => {
+        const newAssociation: LicenseProcess = {
+            id: Date.now(),
+            licenseTypeId,
+            processTypeId,
+        };
+        setLicenseProcesses(prev => [...prev, newAssociation]);
+    };
+
+    const dissociateProcessFromLicense = (associationId: number) => {
+        setLicenseProcesses(prev => prev.filter(assoc => assoc.id !== associationId));
+    };
+
     const value = {
         sectors,
         sectorTypes,
@@ -420,6 +467,8 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         licenseTypes,
         licensingModels,
         validityUnits,
+        processTypes,
+        licenseProcesses,
         legislations,
         legislationTypes,
         fees,
@@ -466,6 +515,10 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         addInfractionType,
         updateInfractionType,
         deleteInfractionType,
+        getProcessTypeById,
+        addProcessType,
+        updateProcessType,
+        deleteProcessType,
         getEntityById,
         addEntity,
         updateEntity,
@@ -475,7 +528,9 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         updateEntityType,
         deleteEntityType,
         associateEntityToLicense,
-        dissociateEntityFromLicense
+        dissociateEntityFromLicense,
+        associateProcessToLicense,
+        dissociateProcessFromLicense
     };
 
     return (

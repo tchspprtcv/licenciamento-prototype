@@ -106,3 +106,16 @@ export interface LicenseEntity {
     licenseTypeId: number;
     entityId: number;
 }
+
+export interface ProcessType {
+    id: number;
+    name: string;
+    description: string;
+    bpmnProcessKey: string; // To link to the external BPMN engine
+}
+
+export interface LicenseProcess {
+    id: number;
+    licenseTypeId: number;
+    processTypeId: number;
+}

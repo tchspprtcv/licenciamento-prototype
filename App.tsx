@@ -26,6 +26,8 @@ import { LicensingModelsListPage } from './pages/LicensingModelsListPage';
 import { LicensingModelDetailPage } from './pages/LicensingModelDetailPage';
 import { ValidityUnitsListPage } from './pages/ValidityUnitsListPage';
 import { ValidityUnitDetailPage } from './pages/ValidityUnitDetailPage';
+import { ProcessTypesListPage } from './pages/ProcessTypesListPage';
+import { ProcessTypeDetailPage } from './pages/ProcessTypeDetailPage';
 
 function App() {
   return (
@@ -65,6 +67,9 @@ function App() {
           <Route path="/parametrizacao/unidades-validade" element={<ValidityUnitsListPage />} />
           <Route path="/parametrizacao/unidades-validade/novo" element={<ValidityUnitDetailPage />} />
           <Route path="/parametrizacao/unidades-validade/:id" element={<ValidityUnitDetailPage />} />
+          <Route path="/parametrizacao/tipos-processo" element={<ProcessTypesListPage />} />
+          <Route path="/parametrizacao/tipos-processo/novo" element={<ProcessTypeDetailPage />} />
+          <Route path="/parametrizacao/tipos-processo/:id" element={<ProcessTypeDetailPage />} />
         </Routes>
       </Layout>
     </DataProvider>

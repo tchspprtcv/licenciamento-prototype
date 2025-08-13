@@ -29,6 +29,7 @@ export const LicenseDossierPage = () => {
         legislationTypes,
         licensingModels,
         validityUnits,
+        processTypes, licenseProcesses, associateProcessToLicense, dissociateProcessFromLicense,
         fees, addFee, deleteFee,
         infractions, addInfraction, deleteInfraction,
         infractionTypes,
@@ -51,6 +52,7 @@ export const LicenseDossierPage = () => {
     const [newFee, setNewFee] = useState({ process: '', value: 0, status: 'Activo' as 'Activo' | 'Inactivo' });
     const [newInfraction, setNewInfraction] = useState({ name: '', infractionTypeId: 0, minFine: 0, maxFine: 0 });
     const [selectedEntityId, setSelectedEntityId] = useState('');
+    const [selectedProcessTypeId, setSelectedProcessTypeId] = useState('');
 
     const getLegislationTypeName = (id: number) => legislationTypes.find(lt => lt.id === id)?.name || 'N/A';
     const getInfractionTypeName = (id: number) => infractionTypes.find(it => it.id === id)?.name || 'N/A';
@@ -67,6 +69,14 @@ export const LicenseDossierPage = () => {
 
     const associatedEntityIds = new Set(associatedEntities.map(assoc => assoc.entity.id));
     const availableEntities = entities.filter(e => !associatedEntityIds.has(e.id));
+
+    const associatedProcesses = id ? licenseProcesses
+        .filter(assoc => assoc.licenseTypeId === parseInt(id))
+        .map(assoc => ({ ...assoc, process: processTypes.find(p => p.id === assoc.processTypeId) }))
+        .filter(assoc => assoc.process) : [];
+
+    const associatedProcessIds = new Set(associatedProcesses.map(assoc => assoc.process.id));
+    const availableProcesses = processTypes.filter(p => !associatedProcessIds.has(p.id));
 
 
     const handleGeneralDataChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -408,7 +418,57 @@ export const LicenseDossierPage = () => {
                     </TabsContent>
 
                     <TabsContent value="processos">
-                         <p className="p-4 text-gray-500">Funcionalidade de gestão de Processos ainda não implementada.</p>
+                        <Card>
+                            <CardHeader><CardTitle>Processos Associados</CardTitle></CardHeader>
+                            <CardContent>
+                                {associatedProcesses.length > 0 ? (
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Nome do Processo</TableHead>
+                                                <TableHead>Chave BPMN</TableHead>
+                                                <TableHead className="text-right">Ações</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {associatedProcesses.map(assoc => (
+                                                <TableRow key={assoc.id}>
+                                                    <TableCell>{assoc.process.name}</TableCell>
+                                                    <TableCell className="font-mono">{assoc.process.bpmnProcessKey}</TableCell>
+                                                    <TableCell className="text-right">
+                                                        <Button variant="ghost" size="sm" onClick={() => dissociateProcessFromLicense(assoc.id)}>
+                                                            <Trash2Icon className="w-4 h-4 text-cv-red" />
+                                                        </Button>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                ) : (
+                                    <p className="p-4 text-center text-gray-500">Nenhum processo associado.</p>
+                                )}
+                            </CardContent>
+                            <CardFooter className="border-t pt-4">
+                                <form onSubmit={(e) => {
+                                    e.preventDefault();
+                                    if (selectedProcessTypeId) {
+                                        associateProcessToLicense(license.id, parseInt(selectedProcessTypeId));
+                                        setSelectedProcessTypeId('');
+                                    }
+                                }} className="flex items-end space-x-4 w-full">
+                                    <div className="flex-grow">
+                                        <label htmlFor="process-select" className="text-sm font-medium">Associar Novo Processo</label>
+                                        <Select id="process-select" value={selectedProcessTypeId} onChange={(e) => setSelectedProcessTypeId(e.target.value)} required>
+                                            <option value="" disabled>Selecione um processo</option>
+                                            {availableProcesses.map(proc => (
+                                                <option key={proc.id} value={proc.id}>{proc.name}</option>
+                                            ))}
+                                        </Select>
+                                    </div>
+                                    <Button type="submit" disabled={!selectedProcessTypeId}>Associar</Button>
+                                </form>
+                            </CardFooter>
+                        </Card>
                     </TabsContent>
                 </Tabs>
             </CardContent>

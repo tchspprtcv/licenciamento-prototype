@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { SECTORS } from '../constants';
-import { Sector, SectorType } from '../types';
+import { useData } from '../context/DataContext';
+import { Sector } from '../types';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -11,32 +11,39 @@ import { Select } from '../components/ui/Select';
 export const SectorDetailPage = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const { getSectorById, addSector, updateSector, sectorTypes } = useData();
     const isNew = id === undefined;
 
-    const [sector, setSector] = useState<Partial<Sector>>({
+    const [sector, setSector] = useState<Omit<Sector, 'id' | 'categoryCount' | 'licenseCount' | 'createdAt'>>({
         name: '',
-        type: SectorType.Primario,
+        sectorTypeId: 0,
         description: '',
         cae: ''
     });
 
     useEffect(() => {
         if (!isNew && id) {
-            const existingSector = SECTORS.find(s => s.id === parseInt(id));
+            const existingSector = getSectorById(parseInt(id));
             if (existingSector) {
                 setSector(existingSector);
             }
         }
-    }, [id, isNew]);
+    }, [id, isNew, getSectorById]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        setSector({ ...sector, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setSector({ ...sector, [name]: name === 'sectorTypeId' ? parseInt(value) : value });
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Here you would typically handle form submission to an API
-        alert(`(Simulação) Setor '${sector.name}' foi ${isNew ? 'criado' : 'atualizado'} com sucesso!`);
+        if (isNew) {
+            addSector(sector as Sector);
+            alert(`Setor '${sector.name}' foi criado com sucesso!`);
+        } else {
+            updateSector({ ...sector, id: parseInt(id!) } as Sector);
+            alert(`Setor '${sector.name}' foi atualizado com sucesso!`);
+        }
         navigate('/setores');
     };
 
@@ -56,10 +63,11 @@ export const SectorDetailPage = () => {
                             <Input id="name" name="name" value={sector.name} onChange={handleChange} required />
                         </div>
                         <div>
-                            <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">Tipo de Setor <span className="text-cv-red">*</span></label>
-                            <Select id="type" name="type" value={sector.type} onChange={handleChange} required>
-                                {Object.values(SectorType).map(type => (
-                                    <option key={type} value={type}>{type}</option>
+                            <label htmlFor="sectorTypeId" className="block text-sm font-medium text-gray-700 mb-1">Tipo de Setor <span className="text-cv-red">*</span></label>
+                            <Select id="sectorTypeId" name="sectorTypeId" value={sector.sectorTypeId} onChange={handleChange} required>
+                                <option value={0} disabled>Selecione um tipo</option>
+                                {sectorTypes.map(type => (
+                                    <option key={type.id} value={type.id}>{type.name}</option>
                                 ))}
                             </Select>
                         </div>

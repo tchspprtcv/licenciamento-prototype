@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
-import { SECTORS } from '../constants';
-import { Sector, SectorType } from '../types';
+import { useData } from '../context/DataContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/ui/Table';
 import { Button } from '../components/ui/Button';
@@ -10,17 +9,25 @@ import { Select } from '../components/ui/Select';
 import { Link } from 'react-router-dom';
 
 export const SectorsListPage = () => {
+    const { sectors, deleteSector, sectorTypes } = useData();
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedType, setSelectedType] = useState<SectorType | 'all'>('all');
+    const [selectedType, setSelectedType] = useState<number | 'all'>('all');
+
+    const getSectorTypeName = (id: number) => sectorTypes.find(st => st.id === id)?.name || 'N/A';
     
-    const filteredSectors = SECTORS.filter(sector => {
+    const filteredSectors = sectors.filter(sector => {
         const matchesSearch = sector.name.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesType = selectedType === 'all' || sector.type === selectedType;
+        const matchesType = selectedType === 'all' || sector.sectorTypeId === selectedType;
         return matchesSearch && matchesType;
     });
 
     const handleDelete = (id: number) => {
-        alert(`(Simulação) Setor com ID ${id} seria eliminado, se não tivesse categorias ou licenças associadas.`);
+        if (window.confirm('Tem a certeza que deseja eliminar este setor?')) {
+            const success = deleteSector(id);
+            if (success) {
+                alert('Setor eliminado com sucesso.');
+            }
+        }
     }
 
     return (
@@ -45,12 +52,12 @@ export const SectorsListPage = () => {
                     />
                     <Select 
                         value={selectedType}
-                        onChange={(e) => setSelectedType(e.target.value as SectorType | 'all')}
+                        onChange={(e) => setSelectedType(e.target.value === 'all' ? 'all' : Number(e.target.value))}
                         className="max-w-xs"
                     >
                         <option value="all">Todos os Tipos</option>
-                        {Object.values(SectorType).map(type => (
-                            <option key={type} value={type}>{type}</option>
+                        {sectorTypes.map(type => (
+                            <option key={type.id} value={type.id}>{type.name}</option>
                         ))}
                     </Select>
                 </div>
@@ -70,7 +77,7 @@ export const SectorsListPage = () => {
                         {filteredSectors.map((sector) => (
                             <TableRow key={sector.id}>
                                 <TableCell className="font-medium">{sector.name}</TableCell>
-                                <TableCell>{sector.type}</TableCell>
+                                <TableCell>{getSectorTypeName(sector.sectorTypeId)}</TableCell>
                                 <TableCell>{sector.categoryCount}</TableCell>
                                 <TableCell>{sector.licenseCount}</TableCell>
                                 <TableCell className="text-right">

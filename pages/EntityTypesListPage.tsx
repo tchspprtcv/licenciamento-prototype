@@ -1,93 +1,66 @@
-
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
+import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
-import { Select } from '../components/ui/Select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/Table';
-import { Button } from '../components/ui/Button';
 
-export const LicensesListPage = () => {
-    const { licenseTypes, sectors, categories, deleteLicenseType } = useData();
+export const EntityTypesListPage = () => {
+    const { entityTypes, deleteEntityType } = useData();
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedSector, setSelectedSector] = useState<number | 'all'>('all');
 
-    const getSectorName = (sectorId: number) => sectors.find(s => s.id === sectorId)?.name || 'N/A';
-    const getCategoryName = (categoryId: number) => categories.find(c => c.id === categoryId)?.name || 'N/A';
-
-    const filteredLicenses = licenseTypes.filter(license => {
-        const matchesSearch = license.name.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesSector = selectedSector === 'all' || license.sectorId === selectedSector;
-        return matchesSearch && matchesSector;
-    });
+    const filteredItems = entityTypes.filter(item =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     const handleDelete = (id: number) => {
-        if (window.confirm('Tem a certeza que deseja eliminar este tipo de licença?')) {
-            const success = deleteLicenseType(id);
-            if (success) {
-                alert('Tipo de licença eliminado com sucesso.');
-            }
+        if (window.confirm('Tem a certeza que deseja eliminar este tipo?')) {
+            deleteEntityType(id);
+            alert('Tipo de entidade eliminado com sucesso.');
         }
-    }
+    };
 
     return (
         <Card>
             <CardHeader>
-                 <div className="flex justify-between items-start">
+                <div className="flex justify-between items-start">
                     <div>
-                        <CardTitle>Tipos de Licença</CardTitle>
-                        <CardDescription>Pesquise, visualize e gira os tipos de licença.</CardDescription>
+                        <CardTitle>Tipos de Entidade</CardTitle>
+                        <CardDescription>Gerir os tipos de entidade (ex: Decisão, Parecer).</CardDescription>
                     </div>
-                    <Button asLink to="/licencas/novo">
+                    <Button asLink to="/parametrizacao/tipos-entidade/novo">
                         <PlusIcon className="w-4 h-4 mr-2" />
-                        Novo Tipo de Licença
+                        Novo Tipo
                     </Button>
                 </div>
                 <div className="flex items-center space-x-4 pt-4">
-                    <Input 
+                    <Input
                         placeholder="Pesquisar por nome..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="max-w-sm"
                     />
-                    <Select 
-                        value={selectedSector}
-                        onChange={(e) => setSelectedSector(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                        className="max-w-xs"
-                    >
-                        <option value="all">Todos os Setores</option>
-                        {sectors.map(sector => (
-                            <option key={sector.id} value={sector.id}>{sector.name}</option>
-                        ))}
-                    </Select>
                 </div>
             </CardHeader>
             <CardContent>
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Nome da Licença</TableHead>
-                            <TableHead>Setor</TableHead>
-                            <TableHead>Categoria</TableHead>
+                            <TableHead>Nome do Tipo</TableHead>
                             <TableHead className="text-right">Ações</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredLicenses.map((license) => (
-                            <TableRow key={license.id}>
-                                <TableCell className="font-medium">{license.name}</TableCell>
-                                <TableCell>{getSectorName(license.sectorId)}</TableCell>
-                                <TableCell>{getCategoryName(license.categoryId)}</TableCell>
+                        {filteredItems.map((item) => (
+                            <TableRow key={item.id}>
+                                <TableCell className="font-medium">{item.name}</TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex justify-end space-x-2">
-                                        <Button asLink to={`/licencas/${license.id}`} variant="ghost" size="sm">
+                                        <Button asLink to={`/parametrizacao/tipos-entidade/${item.id}`} variant="ghost" size="sm">
                                             <PencilIcon className="w-4 h-4" />
                                         </Button>
-                                        <Button variant="ghost" size="sm" onClick={() => handleDelete(license.id)}>
+                                        <Button variant="ghost" size="sm" onClick={() => handleDelete(item.id)}>
                                             <Trash2Icon className="w-4 h-4 text-cv-red" />
-                                        </Button>
-                                         <Button asLink to={`/licencas/dossier/${license.id}`} variant="primary" size="sm">
-                                            Dossiê
                                         </Button>
                                     </div>
                                 </TableCell>
@@ -95,15 +68,15 @@ export const LicensesListPage = () => {
                         ))}
                     </TableBody>
                 </Table>
-                {filteredLicenses.length === 0 && (
-                    <p className="text-center text-gray-500 py-8">Nenhum tipo de licença encontrado.</p>
+                {filteredItems.length === 0 && (
+                    <p className="text-center text-gray-500 py-8">Nenhum tipo encontrado.</p>
                 )}
             </CardContent>
         </Card>
     );
 };
 
-// Icons (assuming these are defined elsewhere or will be added)
+// Icons
 const PlusIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="12" y1="5" x2="12" y2="19" />

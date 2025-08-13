@@ -1,6 +1,8 @@
 import React from 'react';
+import { useData } from '../context/DataContext';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
-import { SECTORS, CATEGORIES, LICENSE_TYPES } from '../constants';
+import { SectorChart } from '../components/charts/SectorChart';
+import { RecentActivity } from '../components/RecentActivity';
 
 const StatCard = ({ title, value, icon, color }: { title: string; value: number; icon: React.ReactElement<React.SVGProps<SVGSVGElement>>; color: string }) => (
     <Card className="shadow-lg">
@@ -16,12 +18,20 @@ const StatCard = ({ title, value, icon, color }: { title: string; value: number;
 );
 
 export const DashboardPage = () => {
+  const { sectors, categories, licenseTypes, entities } = useData();
+
   return (
     <div className="space-y-6">
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <StatCard title="Setores Económicos" value={SECTORS.length} icon={<LayersIcon />} color="text-cv-blue" />
-        <StatCard title="Categorias de Atividade" value={CATEGORIES.length} icon={<GridIcon />} color="text-cv-red" />
-        <StatCard title="Tipos de Licença" value={LICENSE_TYPES.length} icon={<FileTextIcon />} color="text-cv-yellow" />
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <StatCard title="Setores Económicos" value={sectors.length} icon={<LayersIcon />} color="text-cv-blue" />
+        <StatCard title="Categorias de Atividade" value={categories.length} icon={<GridIcon />} color="text-cv-red" />
+        <StatCard title="Tipos de Licença" value={licenseTypes.length} icon={<FileTextIcon />} color="text-cv-yellow" />
+        <StatCard title="Entidades" value={entities.length} icon={<UsersIcon />} color="text-green-500" />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <SectorChart />
+        <RecentActivity />
       </div>
 
       <Card>
@@ -43,6 +53,15 @@ export const DashboardPage = () => {
 
 
 // Icons
+const UsersIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </svg>
+);
+
 const LayersIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <polygon points="12 2 2 7 12 12 22 7 12 2" />

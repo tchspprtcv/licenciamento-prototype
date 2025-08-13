@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { CATEGORIES, SECTORS } from '../constants';
+import { useData } from '../context/DataContext';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
@@ -8,20 +8,26 @@ import { Select } from '../components/ui/Select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/Table';
 
 export const CategoriesListPage = () => {
+    const { categories, sectors, deleteCategory } = useData();
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedSector, setSelectedSector] = useState<number | 'all'>('all');
 
-    const getSectorName = (sectorId: number) => SECTORS.find(s => s.id === sectorId)?.name || 'N/A';
-    const getParentName = (parentId?: number) => parentId ? CATEGORIES.find(c => c.id === parentId)?.name : '-';
+    const getSectorName = (sectorId: number) => sectors.find(s => s.id === sectorId)?.name || 'N/A';
+    const getParentName = (parentId?: number) => parentId ? categories.find(c => c.id === parentId)?.name : '-';
 
-    const filteredCategories = CATEGORIES.filter(category => {
+    const filteredCategories = categories.filter(category => {
         const matchesSearch = category.name.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesSector = selectedSector === 'all' || category.sectorId === selectedSector;
         return matchesSearch && matchesSector;
     });
 
     const handleDelete = (id: number) => {
-        alert(`(Simulação) Categoria com ID ${id} seria eliminada, se não tivesse licenças associadas.`);
+        if (window.confirm('Tem a certeza que deseja eliminar esta categoria?')) {
+            const success = deleteCategory(id);
+            if (success) {
+                alert('Categoria eliminada com sucesso.');
+            }
+        }
     }
 
     return (
@@ -50,7 +56,7 @@ export const CategoriesListPage = () => {
                         className="max-w-xs"
                     >
                         <option value="all">Todos os Setores</option>
-                        {SECTORS.map(sector => (
+                        {sectors.map(sector => (
                             <option key={sector.id} value={sector.id}>{sector.name}</option>
                         ))}
                     </Select>

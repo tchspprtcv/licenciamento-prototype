@@ -1,4 +1,47 @@
-import { Sector, Category, LicenseType, SectorType, Legislation, Fee, Infraction, LicensingModel, ValidityUnit, Entity, EntityType, LicenseEntity, LegislationType, InfractionType, ProcessType, LicenseProcess } from './types';
+import { Sector, Category, LicenseType, SectorType, Legislation, Fee, Infraction, LicensingModel, ValidityUnit, Entity, EntityType, LicenseEntity, LegislationType, InfractionType, ProcessType, LicenseProcess, LicenseRequest, RequestStatus, StepStatus } from './types';
+
+export const LICENSE_REQUESTS: LicenseRequest[] = [
+    {
+        id: 1,
+        requesterName: 'Construções, Lda.',
+        licenseTypeId: 12, // Licença de Construção
+        status: RequestStatus.EmAnalise,
+        currentStep: 2,
+        createdAt: Date.now() - 200000,
+        steps: {
+            pedido: { status: StepStatus.Concluido, date: '2025-08-10' },
+            vistorias: {
+                status: StepStatus.Pendente,
+                items: [
+                    { entityName: 'Câmara Municipal', status: StepStatus.Pendente },
+                    { entityName: 'Bombeiros', status: StepStatus.Pendente },
+                ]
+            },
+            pagamento: { status: StepStatus.Pendente },
+            emissao: { status: StepStatus.Pendente },
+        }
+    },
+    {
+        id: 2,
+        requesterName: 'Restaurante Saboroso, Unipessoal',
+        licenseTypeId: 2, // Alvará de Restauração
+        status: RequestStatus.Aprovado,
+        currentStep: 3,
+        createdAt: Date.now() - 150000,
+        steps: {
+            pedido: { status: StepStatus.Concluido, date: '2025-08-01' },
+            vistorias: {
+                status: StepStatus.Concluido,
+                items: [
+                    { entityName: 'IGAE', status: StepStatus.Concluido, date: '2025-08-05' },
+                    { entityName: 'Delegacia de Saúde', status: StepStatus.Concluido, date: '2025-08-06' },
+                ]
+            },
+            pagamento: { status: StepStatus.Pendente },
+            emissao: { status: StepStatus.Pendente },
+        }
+    }
+];
 
 export const LICENSE_PROCESSES: LicenseProcess[] = [
     { id: 1, licenseTypeId: 12, processTypeId: 1 }, // Licença de Construção -> Licenciamento de Obras

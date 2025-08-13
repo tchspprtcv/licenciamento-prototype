@@ -119,3 +119,52 @@ export interface LicenseProcess {
     licenseTypeId: number;
     processTypeId: number;
 }
+
+// --- License Request Process ---
+
+export enum RequestStatus {
+    Pendente = 'Pendente',
+    EmAnalise = 'Em Análise',
+    Aprovado = 'Aprovado',
+    Recusado = 'Recusado',
+    Concluido = 'Concluído',
+}
+
+export enum StepStatus {
+    Pendente = 'Pendente',
+    Concluido = 'Concluído',
+    AprovadoComRessalvas = 'Aprovado com Ressalvas',
+}
+
+export interface Vistoria {
+    entityName: string;
+    status: StepStatus;
+    date?: string;
+}
+
+export interface LicenseRequest {
+    id: number;
+    requesterName: string;
+    licenseTypeId: number;
+    status: RequestStatus;
+    currentStep: number; // 1 to 4
+    createdAt: number;
+    steps: {
+        pedido: {
+            status: StepStatus;
+            date?: string;
+        };
+        vistorias: {
+            status: StepStatus;
+            items: Vistoria[];
+        };
+        pagamento: {
+            status: StepStatus;
+            date?: string;
+        };
+        emissao: {
+            status: StepStatus;
+            date?: string;
+        };
+    };
+}

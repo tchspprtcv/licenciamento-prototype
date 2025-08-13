@@ -18,7 +18,7 @@ export const LicensingConfigPage = () => {
             </div>
             <TabsContent value="setores">
                 <Card>
-                    <CardHeader className="flex flex-row items-center justify-between">
+                    <CardHeader className="flex flex-row items-start justify-between">
                         <div>
                             <CardTitle>Setores de Atividade</CardTitle>
                             <CardDescription>Pesquise, visualize e gira os setores económicos.</CardDescription>
@@ -35,7 +35,7 @@ export const LicensingConfigPage = () => {
             </TabsContent>
             <TabsContent value="categorias">
                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between">
+                    <CardHeader className="flex flex-row items-start justify-between">
                         <div>
                             <CardTitle>Categorias de Atividade</CardTitle>
                             <CardDescription>Pesquise, visualize e gira as categorias de atividades económicas.</CardDescription>
@@ -52,7 +52,7 @@ export const LicensingConfigPage = () => {
             </TabsContent>
             <TabsContent value="licencas">
                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between">
+                    <CardHeader className="flex flex-row items-start justify-between">
                         <div>
                             <CardTitle>Tipos de Licença</CardTitle>
                             <CardDescription>Pesquise, visualize e gira os tipos de licença.</CardDescription>

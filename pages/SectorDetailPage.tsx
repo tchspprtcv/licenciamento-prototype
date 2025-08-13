@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { SECTORS } from '../constants';
+import { useData } from '../context/DataContext';
 import { Sector, SectorType } from '../types';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -11,9 +11,10 @@ import { Select } from '../components/ui/Select';
 export const SectorDetailPage = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const { getSectorById, addSector, updateSector } = useData();
     const isNew = id === undefined;
 
-    const [sector, setSector] = useState<Partial<Sector>>({
+    const [sector, setSector] = useState<Omit<Sector, 'id' | 'categoryCount' | 'licenseCount'>>({
         name: '',
         type: SectorType.Primario,
         description: '',
@@ -22,12 +23,12 @@ export const SectorDetailPage = () => {
 
     useEffect(() => {
         if (!isNew && id) {
-            const existingSector = SECTORS.find(s => s.id === parseInt(id));
+            const existingSector = getSectorById(parseInt(id));
             if (existingSector) {
                 setSector(existingSector);
             }
         }
-    }, [id, isNew]);
+    }, [id, isNew, getSectorById]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         setSector({ ...sector, [e.target.name]: e.target.value });
@@ -35,8 +36,13 @@ export const SectorDetailPage = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Here you would typically handle form submission to an API
-        alert(`(Simulação) Setor '${sector.name}' foi ${isNew ? 'criado' : 'atualizado'} com sucesso!`);
+        if (isNew) {
+            addSector(sector as Sector);
+            alert(`Setor '${sector.name}' foi criado com sucesso!`);
+        } else {
+            updateSector({ ...sector, id: parseInt(id!) } as Sector);
+            alert(`Setor '${sector.name}' foi atualizado com sucesso!`);
+        }
         navigate('/setores');
     };
 

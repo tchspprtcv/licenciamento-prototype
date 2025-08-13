@@ -24,12 +24,29 @@ export interface Category {
   licenseCount: number;
 }
 
+export enum LicensingModel {
+    ProvisorioDefinitivo = 'Provisório + Definitivo',
+    Definitivo = 'Definitivo',
+}
+
+export enum ValidityUnit {
+    Dias = 'dias',
+    Meses = 'meses',
+    Anos = 'anos',
+}
+
 export interface LicenseType {
   id: number;
   name: string;
   sectorId: number;
   categoryId: number;
   subcategoryId?: number;
+  // Fields for Dossier -> Dados Gerais
+  description?: string;
+  licensingModel?: LicensingModel;
+  validityUnit?: ValidityUnit;
+  validityValue?: number;
+  isLifetime?: boolean;
 }
 
 export interface Legislation {

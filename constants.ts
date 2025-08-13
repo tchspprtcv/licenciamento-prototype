@@ -1,4 +1,4 @@
-import { Sector, Category, LicenseType, SectorType, Legislation, Fee, Infraction } from './types';
+import { Sector, Category, LicenseType, SectorType, Legislation, Fee, Infraction, LicensingModel, ValidityUnit } from './types';
 
 export const SECTORS: Sector[] = [
   { id: 1, name: 'Agricultura e Pecuária', type: SectorType.Primario, description: 'Atividades de cultivo e criação de animais.', categoryCount: 3, licenseCount: 5 },
@@ -36,21 +36,21 @@ export const CATEGORIES: Category[] = [
 ];
 
 export const LICENSE_TYPES: LicenseType[] = [
-  { id: 1, name: 'Licença de Utilização Turística (Hotel)', sectorId: 5, categoryId: 2 },
-  { id: 2, name: 'Alvará de Licença de Funcionamento (Restauração)', sectorId: 5, categoryId: 3 },
-  { id: 3, name: 'Licença de Pesca Industrial', sectorId: 2, categoryId: 4 },
-  { id: 4, name: 'Alvará de Licença de Funcionamento (Comércio)', sectorId: 6, categoryId: 5 },
-  { id: 5, name: 'Licença de Atividade Industrial', sectorId: 3, categoryId: 6 },
-  { id: 6, name: 'Licença de Utilização Turística (Aldeamento)', sectorId: 5, categoryId: 7 },
-  { id: 7, name: 'Registo de Alojamento Local', sectorId: 5, categoryId: 8 },
-  { id: 8, name: 'Alvará de Funcionamento (Restaurante)', sectorId: 5, categoryId: 9 },
-  { id: 9, name: 'Alvará de Funcionamento (Bar)', sectorId: 5, categoryId: 10 },
-  { id: 10, name: 'Licença de Agência de Viagens e Turismo', sectorId: 5, categoryId: 11 },
-  { id: 11, name: 'Licença de Animação Turística', sectorId: 5, categoryId: 12 },
-  { id: 12, name: 'Licença de Construção', sectorId: 4, categoryId: 13 },
-  { id: 13, name: 'Licença de Pesca Artesanal', sectorId: 2, categoryId: 14 },
-  { id: 14, name: 'Licença de Extração de Inertes', sectorId: 7, categoryId: 15 },
-  { id: 15, name: 'Licença de Produção de Energia', sectorId: 8, categoryId: 16 },
+  { id: 1, name: 'Licença de Utilização Turística (Hotel)', sectorId: 5, categoryId: 2, description: 'Licença para hotéis e similares.', licensingModel: LicensingModel.ProvisorioDefinitivo, validityUnit: ValidityUnit.Anos, validityValue: 5, isLifetime: false },
+  { id: 2, name: 'Alvará de Licença de Funcionamento (Restauração)', sectorId: 5, categoryId: 3, description: 'Alvará para restaurantes e bares.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 1, isLifetime: false },
+  { id: 3, name: 'Licença de Pesca Industrial', sectorId: 2, categoryId: 4, description: 'Licença para pesca em alto mar.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 2, isLifetime: false },
+  { id: 4, name: 'Alvará de Licença de Funcionamento (Comércio)', sectorId: 6, categoryId: 5, description: 'Alvará para lojas e estabelecimentos comerciais.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 1, isLifetime: false },
+  { id: 5, name: 'Licença de Atividade Industrial', sectorId: 3, categoryId: 6, description: 'Licença para unidades industriais.', licensingModel: LicensingModel.ProvisorioDefinitivo, validityUnit: ValidityUnit.Anos, validityValue: 3, isLifetime: false },
+  { id: 6, name: 'Licença de Utilização Turística (Aldeamento)', sectorId: 5, categoryId: 7, description: 'Licença para aldeamentos turísticos.', licensingModel: LicensingModel.ProvisorioDefinitivo, validityUnit: ValidityUnit.Anos, validityValue: 5, isLifetime: false },
+  { id: 7, name: 'Registo de Alojamento Local', sectorId: 5, categoryId: 8, description: 'Registo para exploração de alojamento local.', licensingModel: LicensingModel.Definitivo, isLifetime: true },
+  { id: 8, name: 'Alvará de Funcionamento (Restaurante)', sectorId: 5, categoryId: 9, description: 'Alvará para restaurantes.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 1, isLifetime: false },
+  { id: 9, name: 'Alvará de Funcionamento (Bar)', sectorId: 5, categoryId: 10, description: 'Alvará para bares e similares.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 1, isLifetime: false },
+  { id: 10, name: 'Licença de Agência de Viagens e Turismo', sectorId: 5, categoryId: 11, description: 'Licença para agências de viagens.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 2, isLifetime: false },
+  { id: 11, name: 'Licença de Animação Turística', sectorId: 5, categoryId: 12, description: 'Licença para empresas de animação turística.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 2, isLifetime: false },
+  { id: 12, name: 'Licença de Construção', sectorId: 4, categoryId: 13, description: 'Licença de construção de obras.', licensingModel: LicensingModel.ProvisorioDefinitivo, validityUnit: ValidityUnit.Meses, validityValue: 12, isLifetime: false },
+  { id: 13, name: 'Licença de Pesca Artesanal', sectorId: 2, categoryId: 14, description: 'Licença para pesca costeira.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 1, isLifetime: false },
+  { id: 14, name: 'Licença de Extração de Inertes', sectorId: 7, categoryId: 15, description: 'Licença para extração de areia, burgau, etc.', licensingModel: LicensingModel.Definitivo, validityUnit: ValidityUnit.Anos, validityValue: 1, isLifetime: false },
+  { id: 15, name: 'Licença de Produção de Energia', sectorId: 8, categoryId: 16, description: 'Licença para produção de energia.', licensingModel: LicensingModel.ProvisorioDefinitivo, validityUnit: ValidityUnit.Anos, validityValue: 10, isLifetime: false },
 ];
 
 export const LEGISLATIONS: Legislation[] = [

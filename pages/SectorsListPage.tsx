@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { SECTORS } from '../constants';
-import { Sector, SectorType } from '../types';
+import { useData } from '../context/DataContext';
+import { SectorType } from '../types';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/ui/Table';
 import { Button } from '../components/ui/Button';
@@ -10,17 +10,23 @@ import { Select } from '../components/ui/Select';
 import { Link } from 'react-router-dom';
 
 export const SectorsListPage = () => {
+    const { sectors, deleteSector } = useData();
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedType, setSelectedType] = useState<SectorType | 'all'>('all');
     
-    const filteredSectors = SECTORS.filter(sector => {
+    const filteredSectors = sectors.filter(sector => {
         const matchesSearch = sector.name.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesType = selectedType === 'all' || sector.type === selectedType;
         return matchesSearch && matchesType;
     });
 
     const handleDelete = (id: number) => {
-        alert(`(Simulação) Setor com ID ${id} seria eliminado, se não tivesse categorias ou licenças associadas.`);
+        if (window.confirm('Tem a certeza que deseja eliminar este setor?')) {
+            const success = deleteSector(id);
+            if (success) {
+                alert('Setor eliminado com sucesso.');
+            }
+        }
     }
 
     return (

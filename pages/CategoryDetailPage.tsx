@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { CATEGORIES, SECTORS } from '../constants';
+import { useData } from '../context/DataContext';
 import { Category } from '../types';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -10,21 +10,24 @@ import { Select } from '../components/ui/Select';
 export const CategoryDetailPage = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const { categories, sectors, getCategoryById, addCategory, updateCategory } = useData();
     const isNew = id === undefined;
 
-    const [category, setCategory] = useState<Partial<Category>>({
+    const [category, setCategory] = useState<Omit<Category, 'id' | 'licenseCount'>>({
         name: '',
-        sectorId: SECTORS[0]?.id,
+        sectorId: sectors[0]?.id,
+        parentId: undefined,
+        codCAE: ''
     });
 
     useEffect(() => {
         if (!isNew && id) {
-            const existing = CATEGORIES.find(c => c.id === parseInt(id));
+            const existing = getCategoryById(parseInt(id));
             if (existing) {
                 setCategory(existing);
             }
         }
-    }, [id, isNew]);
+    }, [id, isNew, getCategoryById]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -43,11 +46,17 @@ export const CategoryDetailPage = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        alert(`(Simulação) Categoria '${category.name}' foi ${isNew ? 'criada' : 'atualizada'} com sucesso!`);
+        if (isNew) {
+            addCategory(category as Category);
+            alert(`Categoria '${category.name}' foi criada com sucesso!`);
+        } else {
+            updateCategory({ ...category, id: parseInt(id!) } as Category);
+            alert(`Categoria '${category.name}' foi atualizada com sucesso!`);
+        }
         navigate('/categorias');
     };
     
-    const potentialParents = CATEGORIES.filter(c => c.sectorId === category.sectorId && c.id !== category.id);
+    const potentialParents = categories.filter(c => c.sectorId === category.sectorId && (!id || c.id !== parseInt(id)));
 
     return (
         <form onSubmit={handleSubmit}>
@@ -63,7 +72,7 @@ export const CategoryDetailPage = () => {
                         <div>
                             <label htmlFor="sectorId" className="block text-sm font-medium text-gray-700 mb-1">Setor <span className="text-cv-red">*</span></label>
                             <Select id="sectorId" name="sectorId" value={category.sectorId} onChange={handleChange} required>
-                                {SECTORS.map(sector => (
+                                {sectors.map(sector => (
                                     <option key={sector.id} value={sector.id}>{sector.name}</option>
                                 ))}
                             </Select>

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { Sector, Category, LicenseType, SectorType } from '../types';
+import { Sector, Category, LicenseType, SectorType, Legislation, Fee, Infraction, LicensingModel, ValidityUnit, Entity, EntityType, LicenseEntity, LegislationType, InfractionType, ProcessType, LicenseProcess, LicenseRequest, Zone, LicenseZone, Period, Species, Instrument } from '../types';
 import {
     SECTORS as initialSectors,
     SECTOR_TYPES as initialSectorTypes,
@@ -17,7 +17,12 @@ import {
     LICENSE_ENTITIES as initialLicenseEntities,
     PROCESS_TYPES as initialProcessTypes,
     LICENSE_PROCESSES as initialLicenseProcesses,
-    LICENSE_REQUESTS as initialLicenseRequests
+    LICENSE_REQUESTS as initialLicenseRequests,
+    ZONES as initialZones,
+    LICENSE_ZONES as initialLicenseZones,
+    PERIODS as initialPeriods,
+    SPECIES as initialSpecies,
+    INSTRUMENTS as initialInstruments
 } from '../constants';
 
 interface DataContextType {
@@ -38,6 +43,11 @@ interface DataContextType {
     entities: Entity[];
     entityTypes: EntityType[];
     licenseEntities: LicenseEntity[];
+    zones: Zone[];
+    licenseZones: LicenseZone[];
+    periods: Period[];
+    species: Species[];
+    instruments: Instrument[];
     getSectorById: (id: number) => Sector | undefined;
     addSector: (sector: Omit<Sector, 'id' | 'categoryCount' | 'licenseCount' | 'createdAt'>) => void;
     updateSector: (sector: Sector) => void;
@@ -95,6 +105,14 @@ interface DataContextType {
     getLicenseRequestById: (id: number) => LicenseRequest | undefined;
     addLicenseRequest: (request: Omit<LicenseRequest, 'id' | 'createdAt' | 'status' | 'currentStep' | 'steps'>) => void;
     updateLicenseRequest: (request: LicenseRequest) => void;
+    associateZoneToLicense: (licenseTypeId: number, zoneId: number) => void;
+    dissociateZoneFromLicense: (associationId: number) => void;
+    addPeriod: (period: Omit<Period, 'id'>) => void;
+    deletePeriod: (id: number) => void;
+    addSpecies: (species: Omit<Species, 'id'>) => void;
+    deleteSpecies: (id: number) => void;
+    addInstrument: (instrument: Omit<Instrument, 'id'>) => void;
+    deleteInstrument: (id: number) => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -117,6 +135,11 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     const [entities, setEntities] = useState<Entity[]>(initialEntities);
     const [entityTypes, setEntityTypes] = useState<EntityType[]>(initialEntityTypes);
     const [licenseEntities, setLicenseEntities] = useState<LicenseEntity[]>(initialLicenseEntities);
+    const [zones, setZones] = useState<Zone[]>(initialZones);
+    const [licenseZones, setLicenseZones] = useState<LicenseZone[]>(initialLicenseZones);
+    const [periods, setPeriods] = useState<Period[]>(initialPeriods);
+    const [species, setSpecies] = useState<Species[]>(initialSpecies);
+    const [instruments, setInstruments] = useState<Instrument[]>(initialInstruments);
 
     // --- Sector Management ---
     const getSectorById = (id: number) => {
@@ -492,6 +515,42 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         setLicenseRequests(prev => prev.map(req => req.id === updatedRequest.id ? updatedRequest : req));
     };
 
+    // --- Zone Management ---
+    const associateZoneToLicense = (licenseTypeId: number, zoneId: number) => {
+        const newAssociation: LicenseZone = { id: Date.now(), licenseTypeId, zoneId };
+        setLicenseZones(prev => [...prev, newAssociation]);
+    };
+    const dissociateZoneFromLicense = (associationId: number) => {
+        setLicenseZones(prev => prev.filter(assoc => assoc.id !== associationId));
+    };
+
+    // --- Period Management ---
+    const addPeriod = (periodData: Omit<Period, 'id'>) => {
+        const newPeriod: Period = { ...periodData, id: Date.now() };
+        setPeriods(prev => [...prev, newPeriod]);
+    };
+    const deletePeriod = (id: number) => {
+        setPeriods(prev => prev.filter(p => p.id !== id));
+    };
+
+    // --- Species Management ---
+    const addSpecies = (speciesData: Omit<Species, 'id'>) => {
+        const newSpecies: Species = { ...speciesData, id: Date.now() };
+        setSpecies(prev => [...prev, newSpecies]);
+    };
+    const deleteSpecies = (id: number) => {
+        setSpecies(prev => prev.filter(s => s.id !== id));
+    };
+
+    // --- Instrument Management ---
+    const addInstrument = (instrumentData: Omit<Instrument, 'id'>) => {
+        const newInstrument: Instrument = { ...instrumentData, id: Date.now() };
+        setInstruments(prev => [...prev, newInstrument]);
+    };
+    const deleteInstrument = (id: number) => {
+        setInstruments(prev => prev.filter(i => i.id !== id));
+    };
+
     const value = {
         sectors,
         sectorTypes,
@@ -510,6 +569,11 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         entities,
         entityTypes,
         licenseEntities,
+        zones,
+        licenseZones,
+        periods,
+        species,
+        instruments,
         getSectorById,
         addSector,
         updateSector,
@@ -566,7 +630,15 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         dissociateProcessFromLicense,
         getLicenseRequestById,
         addLicenseRequest,
-        updateLicenseRequest
+        updateLicenseRequest,
+        associateZoneToLicense,
+        dissociateZoneFromLicense,
+        addPeriod,
+        deletePeriod,
+        addSpecies,
+        deleteSpecies,
+        addInstrument,
+        deleteInstrument
     };
 
     return (

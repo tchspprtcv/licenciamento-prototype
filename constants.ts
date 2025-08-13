@@ -1,4 +1,4 @@
-import { Sector, Category, LicenseType, SectorType, Legislation, Fee, Infraction, LicensingModel, ValidityUnit, Entity, EntityType, LicenseEntity, LegislationType, InfractionType, ProcessType, LicenseProcess, LicenseRequest, RequestStatus, StepStatus } from './types';
+import { Sector, Category, LicenseType, SectorType, Legislation, Fee, Infraction, LicensingModel, ValidityUnit, Entity, EntityType, LicenseEntity, LegislationType, InfractionType, ProcessType, LicenseProcess, LicenseRequest, RequestStatus, StepStatus, Zone, LicenseZone, Period, Species, Instrument } from './types';
 
 export const LICENSE_REQUESTS: LicenseRequest[] = [
     {
@@ -48,6 +48,32 @@ export const LICENSE_PROCESSES: LicenseProcess[] = [
     { id: 2, licenseTypeId: 2, processTypeId: 2 }, // Alvará de Restauração -> Licenciamento de Restauração
     { id: 3, licenseTypeId: 8, processTypeId: 2 }, // Alvará de Restaurante -> Licenciamento de Restauração
     { id: 4, licenseTypeId: 5, processTypeId: 3 }, // Licença Industrial -> Licenciamento Industrial
+];
+
+export const ZONES: Zone[] = [
+    { id: 1, name: 'Parque Natural do Fogo' },
+    { id: 2, name: 'Reserva Natural de Santa Luzia' },
+    { id: 3, name: 'Zona Costeira da Boa Esperança' },
+];
+
+export const LICENSE_ZONES: LicenseZone[] = [
+    { id: 1, licenseTypeId: 11, zoneId: 1 }, // Animação Turística -> Parque Natural do Fogo
+    { id: 2, licenseTypeId: 13, zoneId: 3 }, // Pesca Artesanal -> Zona Costeira da Boa Esperança
+];
+
+export const PERIODS: Period[] = [
+    { id: 1, licenseTypeId: 13, startDate: '2025-03-01', endDate: '2025-09-30' }, // Pesca Artesanal
+];
+
+export const SPECIES: Species[] = [
+    { id: 1, licenseTypeId: 13, name: 'Atum', quota: 1000, cullValue: 500, fineValue: 2000 },
+    { id: 2, licenseTypeId: 13, name: 'Serra', quota: 5000, cullValue: 250, fineValue: 1000 },
+];
+
+export const INSTRUMENTS: Instrument[] = [
+    { id: 1, licenseTypeId: 11, name: 'Equipamento de Escalada' },
+    { id: 2, licenseTypeId: 11, name: 'Bicicleta de Montanha' },
+    { id: 3, licenseTypeId: 13, name: 'Rede de Emalhar' },
 ];
 
 export const PROCESS_TYPES: ProcessType[] = [

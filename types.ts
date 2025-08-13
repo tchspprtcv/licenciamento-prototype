@@ -120,6 +120,43 @@ export interface LicenseProcess {
     processTypeId: number;
 }
 
+// --- Dossier -> Zonas/Áreas ---
+export interface Zone {
+    id: number;
+    name: string;
+}
+
+export interface LicenseZone {
+    id: number;
+    licenseTypeId: number;
+    zoneId: number;
+}
+
+// --- Dossier -> Período ---
+export interface Period {
+    id: number;
+    licenseTypeId: number;
+    startDate: string; // YYYY-MM-DD
+    endDate: string; // YYYY-MM-DD
+}
+
+// --- Dossier -> Espécie ---
+export interface Species {
+    id: number;
+    licenseTypeId: number;
+    name: string;
+    quota: number;
+    cullValue: number; // Valor de abate
+    fineValue: number; // Multa
+}
+
+// --- Dossier -> Instrumentos ---
+export interface Instrument {
+    id: number;
+    licenseTypeId: number;
+    name: string;
+}
+
 // --- License Request Process ---
 
 export enum RequestStatus {

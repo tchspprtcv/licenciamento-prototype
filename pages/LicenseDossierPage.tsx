@@ -33,7 +33,11 @@ export const LicenseDossierPage = () => {
         fees, addFee, deleteFee,
         infractions, addInfraction, deleteInfraction,
         infractionTypes,
-        entities, entityTypes, licenseEntities, associateEntityToLicense, dissociateEntityFromLicense
+        entities, entityTypes, licenseEntities, associateEntityToLicense, dissociateEntityFromLicense,
+        zones, licenseZones, associateZoneToLicense, dissociateZoneFromLicense,
+        periods, addPeriod, deletePeriod,
+        species, addSpecies, deleteSpecies,
+        instruments, addInstrument, deleteInstrument
     } = useData();
 
 
@@ -53,6 +57,10 @@ export const LicenseDossierPage = () => {
     const [newInfraction, setNewInfraction] = useState({ name: '', infractionTypeId: 0, minFine: 0, maxFine: 0 });
     const [selectedEntityId, setSelectedEntityId] = useState('');
     const [selectedProcessTypeId, setSelectedProcessTypeId] = useState('');
+    const [selectedZoneId, setSelectedZoneId] = useState('');
+    const [newPeriod, setNewPeriod] = useState({ startDate: '', endDate: '' });
+    const [newSpecies, setNewSpecies] = useState({ name: '', quota: 0, cullValue: 0, fineValue: 0 });
+    const [newInstrument, setNewInstrument] = useState({ name: '' });
 
     const getLegislationTypeName = (id: number) => legislationTypes.find(lt => lt.id === id)?.name || 'N/A';
     const getInfractionTypeName = (id: number) => infractionTypes.find(it => it.id === id)?.name || 'N/A';
@@ -77,6 +85,20 @@ export const LicenseDossierPage = () => {
 
     const associatedProcessIds = new Set(associatedProcesses.map(assoc => assoc.process.id));
     const availableProcesses = processTypes.filter(p => !associatedProcessIds.has(p.id));
+
+    const associatedZones = id ? licenseZones
+        .filter(assoc => assoc.licenseTypeId === parseInt(id))
+        .map(assoc => ({ ...assoc, zone: zones.find(z => z.id === assoc.zoneId) }))
+        .filter(assoc => assoc.zone) : [];
+
+    const associatedZoneIds = new Set(associatedZones.map(assoc => assoc.zone.id));
+    const availableZones = zones.filter(z => !associatedZoneIds.has(z.id));
+
+    const licensePeriods = id ? periods.filter(p => p.licenseTypeId === parseInt(id)) : [];
+
+    const licenseSpecies = id ? species.filter(s => s.licenseTypeId === parseInt(id)) : [];
+
+    const licenseInstruments = id ? instruments.filter(i => i.licenseTypeId === parseInt(id)) : [];
 
 
     const handleGeneralDataChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -118,6 +140,10 @@ export const LicenseDossierPage = () => {
                         <TabsTrigger value="infracoes">Infrações</TabsTrigger>
                         <TabsTrigger value="entidades">Entidades</TabsTrigger>
                         <TabsTrigger value="processos">Processos</TabsTrigger>
+                        <TabsTrigger value="zonas">Zonas/Áreas</TabsTrigger>
+                        <TabsTrigger value="periodo">Período</TabsTrigger>
+                        <TabsTrigger value="especie">Espécie</TabsTrigger>
+                        <TabsTrigger value="instrumentos">Instrumentos</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="geral">
@@ -466,6 +492,217 @@ export const LicenseDossierPage = () => {
                                         </Select>
                                     </div>
                                     <Button type="submit" disabled={!selectedProcessTypeId}>Associar</Button>
+                                </form>
+                            </CardFooter>
+                        </Card>
+                    </TabsContent>
+
+                    <TabsContent value="zonas">
+                        <Card>
+                            <CardHeader><CardTitle>Zonas e Áreas Associadas</CardTitle></CardHeader>
+                            <CardContent>
+                                {associatedZones.length > 0 ? (
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Nome da Zona</TableHead>
+                                                <TableHead className="text-right">Ações</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {associatedZones.map(assoc => (
+                                                <TableRow key={assoc.id}>
+                                                    <TableCell>{assoc.zone.name}</TableCell>
+                                                    <TableCell className="text-right">
+                                                        <Button variant="ghost" size="sm" onClick={() => dissociateZoneFromLicense(assoc.id)}>
+                                                            <Trash2Icon className="w-4 h-4 text-cv-red" />
+                                                        </Button>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                ) : (
+                                    <p className="p-4 text-center text-gray-500">Nenhuma zona associada.</p>
+                                )}
+                            </CardContent>
+                            <CardFooter className="border-t pt-4">
+                                <form onSubmit={(e) => {
+                                    e.preventDefault();
+                                    if (selectedZoneId) {
+                                        associateZoneToLicense(license.id, parseInt(selectedZoneId));
+                                        setSelectedZoneId('');
+                                    }
+                                }} className="flex items-end space-x-4 w-full">
+                                    <div className="flex-grow">
+                                        <label htmlFor="zone-select" className="text-sm font-medium">Associar Nova Zona</label>
+                                        <Select id="zone-select" value={selectedZoneId} onChange={(e) => setSelectedZoneId(e.target.value)} required>
+                                            <option value="" disabled>Selecione uma zona</option>
+                                            {availableZones.map(zone => (
+                                                <option key={zone.id} value={zone.id}>{zone.name}</option>
+                                            ))}
+                                        </Select>
+                                    </div>
+                                    <Button type="submit" disabled={!selectedZoneId}>Associar</Button>
+                                </form>
+                            </CardFooter>
+                        </Card>
+                    </TabsContent>
+
+                    <TabsContent value="periodo">
+                        <Card>
+                            <CardHeader><CardTitle>Períodos de Validade</CardTitle></CardHeader>
+                            <CardContent>
+                                {licensePeriods.length > 0 ? (
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Data de Início</TableHead>
+                                                <TableHead>Data de Fim</TableHead>
+                                                <TableHead className="text-right">Ações</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {licensePeriods.map(period => (
+                                                <TableRow key={period.id}>
+                                                    <TableCell>{period.startDate}</TableCell>
+                                                    <TableCell>{period.endDate}</TableCell>
+                                                    <TableCell className="text-right">
+                                                        <Button variant="ghost" size="sm" onClick={() => deletePeriod(period.id)}>
+                                                            <Trash2Icon className="w-4 h-4 text-cv-red" />
+                                                        </Button>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                ) : (
+                                    <p className="p-4 text-center text-gray-500">Nenhum período definido.</p>
+                                )}
+                            </CardContent>
+                            <CardFooter className="border-t pt-4">
+                                <form onSubmit={(e) => {
+                                    e.preventDefault();
+                                    addPeriod({ ...newPeriod, licenseTypeId: license.id });
+                                    setNewPeriod({ startDate: '', endDate: '' });
+                                }} className="flex items-end space-x-4 w-full">
+                                    <div className="flex-grow">
+                                        <label className="text-sm font-medium">Data de Início</label>
+                                        <Input type="date" value={newPeriod.startDate} onChange={(e) => setNewPeriod({ ...newPeriod, startDate: e.target.value })} required />
+                                    </div>
+                                    <div className="flex-grow">
+                                        <label className="text-sm font-medium">Data de Fim</label>
+                                        <Input type="date" value={newPeriod.endDate} onChange={(e) => setNewPeriod({ ...newPeriod, endDate: e.target.value })} required />
+                                    </div>
+                                    <Button type="submit">Adicionar Período</Button>
+                                </form>
+                            </CardFooter>
+                        </Card>
+                    </TabsContent>
+
+                    <TabsContent value="especie">
+                        <Card>
+                            <CardHeader><CardTitle>Espécies e Quotas</CardTitle></CardHeader>
+                            <CardContent>
+                                {licenseSpecies.length > 0 ? (
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Nome da Espécie</TableHead>
+                                                <TableHead>Quota</TableHead>
+                                                <TableHead>Valor de Abate (CVE)</TableHead>
+                                                <TableHead>Multa (CVE)</TableHead>
+                                                <TableHead className="text-right">Ações</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {licenseSpecies.map(s => (
+                                                <TableRow key={s.id}>
+                                                    <TableCell>{s.name}</TableCell>
+                                                    <TableCell>{s.quota}</TableCell>
+                                                    <TableCell>{s.cullValue.toLocaleString('pt-CV')}</TableCell>
+                                                    <TableCell>{s.fineValue.toLocaleString('pt-CV')}</TableCell>
+                                                    <TableCell className="text-right">
+                                                        <Button variant="ghost" size="sm" onClick={() => deleteSpecies(s.id)}>
+                                                            <Trash2Icon className="w-4 h-4 text-cv-red" />
+                                                        </Button>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                ) : (
+                                    <p className="p-4 text-center text-gray-500">Nenhuma espécie definida.</p>
+                                )}
+                            </CardContent>
+                            <CardFooter className="border-t pt-4">
+                                <form onSubmit={(e) => {
+                                    e.preventDefault();
+                                    addSpecies({ ...newSpecies, licenseTypeId: license.id });
+                                    setNewSpecies({ name: '', quota: 0, cullValue: 0, fineValue: 0 });
+                                }} className="flex items-end space-x-4 w-full">
+                                    <div className="flex-grow">
+                                        <label className="text-sm font-medium">Nome da Espécie</label>
+                                        <Input value={newSpecies.name} onChange={(e) => setNewSpecies({ ...newSpecies, name: e.target.value })} required />
+                                    </div>
+                                    <div style={{flexBasis: '120px'}}>
+                                        <label className="text-sm font-medium">Quota</label>
+                                        <Input type="number" value={newSpecies.quota} onChange={(e) => setNewSpecies({ ...newSpecies, quota: parseInt(e.target.value) })} required />
+                                    </div>
+                                    <div style={{flexBasis: '180px'}}>
+                                        <label className="text-sm font-medium">Valor de Abate (CVE)</label>
+                                        <Input type="number" value={newSpecies.cullValue} onChange={(e) => setNewSpecies({ ...newSpecies, cullValue: parseInt(e.target.value) })} required />
+                                    </div>
+                                    <div style={{flexBasis: '180px'}}>
+                                        <label className="text-sm font-medium">Multa (CVE)</label>
+                                        <Input type="number" value={newSpecies.fineValue} onChange={(e) => setNewSpecies({ ...newSpecies, fineValue: parseInt(e.target.value) })} required />
+                                    </div>
+                                    <Button type="submit">Adicionar Espécie</Button>
+                                </form>
+                            </CardFooter>
+                        </Card>
+                    </TabsContent>
+
+                    <TabsContent value="instrumentos">
+                        <Card>
+                            <CardHeader><CardTitle>Instrumentos Permitidos</CardTitle></CardHeader>
+                            <CardContent>
+                                {licenseInstruments.length > 0 ? (
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Nome do Instrumento</TableHead>
+                                                <TableHead className="text-right">Ações</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {licenseInstruments.map(i => (
+                                                <TableRow key={i.id}>
+                                                    <TableCell>{i.name}</TableCell>
+                                                    <TableCell className="text-right">
+                                                        <Button variant="ghost" size="sm" onClick={() => deleteInstrument(i.id)}>
+                                                            <Trash2Icon className="w-4 h-4 text-cv-red" />
+                                                        </Button>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                ) : (
+                                    <p className="p-4 text-center text-gray-500">Nenhum instrumento definido.</p>
+                                )}
+                            </CardContent>
+                            <CardFooter className="border-t pt-4">
+                                <form onSubmit={(e) => {
+                                    e.preventDefault();
+                                    addInstrument({ ...newInstrument, licenseTypeId: license.id });
+                                    setNewInstrument({ name: '' });
+                                }} className="flex items-end space-x-4 w-full">
+                                    <div className="flex-grow">
+                                        <label className="text-sm font-medium">Nome do Instrumento</label>
+                                        <Input value={newInstrument.name} onChange={(e) => setNewInstrument({ ...newInstrument, name: e.target.value })} required />
+                                    </div>
+                                    <Button type="submit">Adicionar Instrumento</Button>
                                 </form>
                             </CardFooter>
                         </Card>

@@ -36,7 +36,6 @@ export const Sidebar = () => {
         <NavLink to="/parametrizacao" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
           <SettingsIcon className="w-5 h-5" />
           <span className="mx-4 font-medium">Outras Parametrizações</span>
-          <span className="mx-4 font-medium">Outras Parametrizações</span>
         </NavLink>
       </nav>
     </div>

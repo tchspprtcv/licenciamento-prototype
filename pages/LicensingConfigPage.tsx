@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/Tabs';
 import { Button } from '../components/ui/Button';
@@ -6,50 +6,68 @@ import { SectorsList } from '../components/lists/SectorsList';
 import { CategoriesList } from '../components/lists/CategoriesList';
 import { LicenseTypesList } from '../components/lists/LicenseTypesList';
 
-type ActiveTab = 'setores' | 'categorias' | 'licencas';
-
 export const LicensingConfigPage = () => {
-    const [activeTab, setActiveTab] = useState<ActiveTab>('setores');
-
-    const newButtonConfig = {
-        setores: { text: 'Novo Setor', to: '/setores/novo' },
-        categorias: { text: 'Nova Categoria', to: '/categorias/novo' },
-        licencas: { text: 'Novo Tipo de Licença', to: '/licencas/novo' },
-    };
-
     return (
-        <Card>
-            <CardHeader>
-                <div className="flex justify-between items-start">
-                    <div>
-                        <CardTitle>Configuração de Licenciamento</CardTitle>
-                        <CardDescription>Gira os elementos base para o processo de licenciamento.</CardDescription>
-                    </div>
-                    <Button asLink to={newButtonConfig[activeTab].to}>
-                        <PlusIcon className="w-4 h-4 mr-2" />
-                        {newButtonConfig[activeTab].text}
-                    </Button>
-                </div>
-            </CardHeader>
-            <CardContent>
-                <Tabs defaultValue="setores" onValueChange={(value) => setActiveTab(value as ActiveTab)}>
-                    <TabsList>
-                        <TabsTrigger value="setores">Setores</TabsTrigger>
-                        <TabsTrigger value="categorias">Categorias</TabsTrigger>
-                        <TabsTrigger value="licencas">Tipos de Licença</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="setores">
+        <Tabs defaultValue="setores" className="space-y-4">
+            <div className="flex items-center justify-between space-x-4">
+                <TabsList>
+                    <TabsTrigger value="setores">Setores</TabsTrigger>
+                    <TabsTrigger value="categorias">Categorias</TabsTrigger>
+                    <TabsTrigger value="licencas">Tipos de Licença</TabsTrigger>
+                </TabsList>
+            </div>
+            <TabsContent value="setores">
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <div>
+                            <CardTitle>Setores de Atividade</CardTitle>
+                            <CardDescription>Pesquise, visualize e gira os setores económicos.</CardDescription>
+                        </div>
+                        <Button asLink to="/setores/novo">
+                            <PlusIcon className="w-4 h-4 mr-2" />
+                            Novo Setor
+                        </Button>
+                    </CardHeader>
+                    <CardContent>
                         <SectorsList />
-                    </TabsContent>
-                    <TabsContent value="categorias">
+                    </CardContent>
+                </Card>
+            </TabsContent>
+            <TabsContent value="categorias">
+                 <Card>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <div>
+                            <CardTitle>Categorias de Atividade</CardTitle>
+                            <CardDescription>Pesquise, visualize e gira as categorias de atividades económicas.</CardDescription>
+                        </div>
+                        <Button asLink to="/categorias/novo">
+                            <PlusIcon className="w-4 h-4 mr-2" />
+                            Nova Categoria
+                        </Button>
+                    </CardHeader>
+                    <CardContent>
                         <CategoriesList />
-                    </TabsContent>
-                    <TabsContent value="licencas">
+                    </CardContent>
+                </Card>
+            </TabsContent>
+            <TabsContent value="licencas">
+                 <Card>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <div>
+                            <CardTitle>Tipos de Licença</CardTitle>
+                            <CardDescription>Pesquise, visualize e gira os tipos de licença.</CardDescription>
+                        </div>
+                        <Button asLink to="/licencas/novo">
+                            <PlusIcon className="w-4 h-4 mr-2" />
+                            Novo Tipo de Licença
+                        </Button>
+                    </CardHeader>
+                    <CardContent>
                         <LicenseTypesList />
-                    </TabsContent>
-                </Tabs>
-            </CardContent>
-        </Card>
+                    </CardContent>
+                </Card>
+            </TabsContent>
+        </Tabs>
     );
 };
 
